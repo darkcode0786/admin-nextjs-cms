@@ -1,0 +1,102 @@
+import type { Metadata } from "next";
+
+import DonorGameteHero from "@/components/sections/donor-gametes/DonorGameteHero";
+import MedicalRegistration from "@/components/sections/MedicalRegistration";
+import VideoInsightsSection from "@/components/sections/VideoInsightsSection";
+import DonorGameteIndicationsAndChecklist from "@/components/sections/donor-gametes/DonorGameteIndicationsAndChecklist";
+import DonorGameteProtocolAndWhy from "@/components/sections/donor-gametes/DonorGameteProtocolAndWhy";
+import DonorGameteReviews from "@/components/sections/donor-gametes/DonorGameteReviews";
+import IvfSuccessClinics from "@/components/sections/ivf-stories/IvfSuccessClinics";
+import DonorGameteCostAndFaq from "@/components/sections/donor-gametes/DonorGameteCostAndFaq";
+import DonorGameteRelatedTreatments from "@/components/sections/donor-gametes/DonorGameteRelatedTreatments";
+import AboutConsultation from "@/components/sections/about-mona-dahiya/AboutConsultation";
+import AboutParenthoodCta from "@/components/sections/about-mona-dahiya/AboutParenthoodCta";
+
+import { SectionReveal } from "@/components/ui/Reveal";
+
+export const metadata: Metadata = {
+  title:
+    "Ethical & ART Act-Compliant Donor Gamete Programs (Egg & Sperm) | Dr. Mona Dahiya",
+  description:
+    "Donor egg and donor sperm IVF with Dr. Mona Dahiya — ART Act-compliant screening, licensed ART banks, and success rates above 70-75% across Noida, Delhi and Ghaziabad.",
+};
+
+export default function DonorGametePage() {
+  return (
+    <main className="flex min-h-screen flex-col bg-pink">
+      <DonorGameteHero />
+
+      <SectionReveal>
+        <MedicalRegistration
+          councilRegLabels={{
+            DMC: "DMC registration number",
+            MCI: "MCI registration number",
+            UPMC: "UPMC registration number",
+          }}
+        />
+      </SectionReveal>
+
+      <SectionReveal delay={0.04}>
+        <VideoInsightsSection
+          title="IVF with Donor Eggs or Sperm: Process & Guidelines Explained"
+          imageSrc="/Video-section-images/Donor-Gamete-IVF-in-Delhi-NCR.jpg"
+          imageAlt="Dr. Mona Dahiya explaining Donor IVF process and guidelines"
+        />
+      </SectionReveal>
+
+      <DonorGameteIndicationsAndChecklist />
+
+      <DonorGameteProtocolAndWhy />
+
+      <SectionReveal delay={0.04}>
+        <DonorGameteReviews />
+      </SectionReveal>
+
+      <SectionReveal delay={0.04}>
+        <IvfSuccessClinics />
+      </SectionReveal>
+
+      <DonorGameteCostAndFaq />
+
+      <SectionReveal delay={0.04}>
+        <DonorGameteRelatedTreatments />
+      </SectionReveal>
+
+      <SectionReveal delay={0.04}>
+        <AboutConsultation
+          sectionId="book-consultation"
+          eyebrow="Next step"
+          title={
+            <>
+              Book an In-Clinic or
+              <br />
+              Online Consultation
+            </>
+          }
+          subtitle={
+            <>
+              Book an in-clinic consultation with Dr. Mona Dahiya in Noida,
+              Ghaziabad or Delhi, or a video review of your reports. Direct
+              line:{" "}
+              <a
+                href="tel:+919267982924"
+                className="font-medium text-blue hover:text-rose"
+              >
+                +91 92679 82924
+              </a>
+              .
+            </>
+          }
+          appendContacts={false}
+          consultationDuration=""
+          defaultClinic="Noida"
+          sectionBg="bg-white"
+        />
+      </SectionReveal>
+
+      <SectionReveal delay={0.04}>
+        <AboutParenthoodCta />
+      </SectionReveal>
+    </main>
+  );
+}

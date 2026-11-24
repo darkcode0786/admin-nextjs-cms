@@ -1,0 +1,365 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { FaCheck, FaCalendarAlt } from "react-icons/fa";
+import siteData from "@/data/site.json";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/Reveal";
+import { FaqAccordion } from "@/components/ui/treatment";
+
+type BenefitItem = {
+  title: string;
+  description: string;
+  linkLabel?: string;
+  linkHref?: string;
+};
+
+type PrepareItem = {
+  label: string;
+  text: string;
+};
+
+type StepItem = {
+  title: string;
+  bullets: string[];
+};
+
+type FaqItem = {
+  q: string;
+  a: string;
+  linkLabel?: string;
+  linkHref?: string;
+};
+
+const cardClass =
+  "card-highlight rounded-[22px] border border-rose/20 bg-white p-5 shadow-[0_6px_24px_rgba(232,62,116,0.08)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(232,62,116,0.14)] sm:p-6";
+
+export default function OnlineConsultationContent() {
+  const { benefits, prepare, steps, why, fees, faq } =
+    siteData.onlineConsultationPage;
+
+  const benefitItems = benefits.items as BenefitItem[];
+  const prepareItems = prepare.items as PrepareItem[];
+  const stepItems = steps.items as StepItem[];
+  const faqItems = faq.items as FaqItem[];
+
+  const faqMid = Math.ceil(faqItems.length / 2);
+  const faqColumns = [faqItems.slice(0, faqMid), faqItems.slice(faqMid)];
+
+  return (
+    <>
+      {/* 1. Who Benefits (White) */}
+      <section className="relative overflow-hidden bg-white py-8 sm:py-10 lg:py-12 border-y border-[#fde2ec]/70">
+        <div className="page-container relative">
+          <Reveal className="mb-7 sm:mb-9">
+            <p className="text-[12px] font-semibold tracking-wide text-rose sm:text-[13px]">
+              {benefits.eyebrow}
+            </p>
+            <h2 className="font-serif mt-1.5 max-w-3xl text-[1.85rem] leading-tight font-normal tracking-tight text-ink sm:text-[2.35rem]">
+              {benefits.title}
+            </h2>
+          </Reveal>
+
+          <Stagger
+            className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5"
+            stagger={0.06}
+          >
+            {benefitItems.map((item, i) => (
+              <StaggerItem key={item.title} className="h-full">
+                <article
+                  className={`${cardClass} flex h-full flex-col border-t-2 border-t-rose`}
+                >
+                  <div className="flex items-center gap-3.5">
+                    <span className="card-badge flex size-10 shrink-0 items-center justify-center rounded-xl bg-rose text-[14px] font-bold text-white shadow-sm">
+                      {i + 1}
+                    </span>
+                    <h3 className="font-serif text-[15.5px] leading-snug font-semibold tracking-tight text-ink sm:text-[16.5px]">
+                      {item.title}
+                    </h3>
+                  </div>
+
+                  <p className="mt-3.5 text-[13.5px] leading-relaxed text-ink/80 sm:text-[14px]">
+                    {item.description}
+                    {item.linkLabel && item.linkHref ? (
+                      <>
+                        {" "}
+                        {item.linkHref.startsWith("#") ? (
+                          <a
+                            href={item.linkHref}
+                            className="font-semibold text-rose underline underline-offset-2 transition-colors hover:text-rose-dark"
+                          >
+                            {item.linkLabel}
+                          </a>
+                        ) : (
+                          <Link
+                            href={item.linkHref}
+                            className="font-semibold text-rose underline underline-offset-2 transition-colors hover:text-rose-dark"
+                          >
+                            {item.linkLabel}
+                          </Link>
+                        )}
+                      </>
+                    ) : null}
+                  </p>
+                </article>
+              </StaggerItem>
+            ))}
+            <StaggerItem className="h-full min-h-[210px] sm:min-h-[225px]">
+              <div className="card-highlight relative h-full min-h-[210px] overflow-hidden rounded-[22px] border border-rose/20 bg-white shadow-[0_6px_24px_rgba(232,62,116,0.08)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(232,62,116,0.14)] sm:min-h-[225px]">
+                <Image
+                  src="/shared-gallery/online consultation.jpeg"
+                  alt="Online Fertility Consultation with Dr. Mona Dahiya"
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover object-center"
+                />
+              </div>
+            </StaggerItem>
+          </Stagger>
+        </div>
+      </section>
+
+      {/* 2. What to Prepare (Pink) */}
+      <section id="what-to-prepare" className="relative overflow-hidden bg-pink py-8 sm:py-10 lg:py-12 scroll-mt-28">
+        <div className="page-container relative">
+          <Reveal className="mb-7 sm:mb-9">
+            <p className="text-[12px] font-semibold tracking-wide text-rose sm:text-[13px]">
+              {prepare.eyebrow}
+            </p>
+            <h2 className="font-serif mt-1.5 max-w-4xl text-[1.85rem] leading-tight font-normal tracking-tight text-ink sm:text-[2.35rem]">
+              {prepare.title}
+            </h2>
+          </Reveal>
+
+          <div className="space-y-3.5">
+            {prepareItems.map((item) => (
+              <Reveal key={item.label}>
+                <div className="flex items-start gap-3.5 rounded-[18px] border border-[#fde2ec] bg-[#fff8fa] px-4 py-4 shadow-[0_4px_18px_rgba(232,62,116,0.06)] sm:px-5 sm:py-4.5">
+                  <span className="signature-tick mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full text-white shadow-xs">
+                    <FaCheck className="size-2.5" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-bold text-[1rem] leading-snug text-ink sm:text-[1.0625rem]">
+                      {item.label.replace(/:\s*$/, "")}
+                    </h3>
+                    <p className="mt-1 text-[13.5px] leading-relaxed text-ink/80 sm:text-[14px]">
+                      {item.text}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Step-by-Step Process (White) */}
+      <section className="relative overflow-hidden bg-white py-8 sm:py-10 lg:py-12 border-y border-[#fde2ec]/70">
+        <div className="page-container relative">
+          <Reveal className="mb-7 sm:mb-9">
+            <p className="text-[12px] font-semibold tracking-wide text-rose sm:text-[13px]">
+              {steps.eyebrow}
+            </p>
+            <h2 className="font-serif mt-1.5 max-w-3xl text-[1.85rem] leading-tight font-normal tracking-tight text-ink sm:text-[2.35rem]">
+              {steps.title}
+            </h2>
+          </Reveal>
+
+          <Stagger
+            className="grid auto-rows-fr grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5"
+            stagger={0.06}
+          >
+            {stepItems.map((item, i) => (
+              <StaggerItem
+                key={item.title}
+                className="h-full min-h-[240px] sm:min-h-[260px]"
+              >
+                <article
+                  className={`${cardClass} flex h-full min-h-[240px] flex-col border-t-2 border-t-rose sm:min-h-[260px]`}
+                >
+                  <div className="flex items-center gap-3.5">
+                    <span className="card-badge flex size-10 shrink-0 items-center justify-center rounded-xl bg-rose text-[14px] font-bold text-white shadow-sm">
+                      {i + 1}
+                    </span>
+                    <h3 className="font-serif text-[15.5px] leading-snug font-semibold tracking-tight text-ink sm:text-[16.5px]">
+                      {item.title}
+                    </h3>
+                  </div>
+
+                  <ul className="mt-3.5 ml-4 space-y-2.5 border-l border-rose/35 pl-3.5">
+                    {item.bullets.map((bullet) => (
+                      <li
+                        key={bullet}
+                        className="relative text-[13.5px] leading-relaxed text-ink/80 before:absolute before:top-2.5 before:-left-3.5 before:h-px before:w-2.5 before:bg-rose/45 sm:text-[14px]"
+                      >
+                        {bullet}
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+      </section>
+
+      {/* 4. Why Book (Pink) */}
+      <section className="relative overflow-hidden bg-pink py-8 sm:py-10 lg:py-12">
+        <div className="page-container relative">
+          <Reveal className="mb-7 sm:mb-9">
+            <p className="text-[12px] font-semibold tracking-wide text-rose sm:text-[13px]">
+              {why.eyebrow}
+            </p>
+            <h2 className="font-serif mt-1.5 max-w-4xl text-[1.85rem] leading-tight font-normal tracking-tight text-ink sm:text-[2.35rem]">
+              {why.title}
+            </h2>
+          </Reveal>
+
+          <div className="space-y-3.5">
+            {why.items.map((item) => (
+              <Reveal key={item.title}>
+                <div className="flex items-start gap-4 rounded-[20px] border border-[#fde2ec] bg-[#fff8fa] px-4 py-4 shadow-[0_4px_18px_rgba(232,62,116,0.06)] sm:px-6 sm:py-5">
+                  <span className="signature-tick mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl text-white">
+                    <FaCheck className="size-3.5" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-[15.5px] font-bold text-ink sm:text-[16.5px]">
+                      {item.title}
+                    </h3>
+                    <p className="mt-1 text-[13.5px] leading-relaxed text-ink/80 sm:text-[14.5px]">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Fees (White) */}
+      <section className="relative overflow-hidden bg-white py-8 sm:py-10 lg:py-12 border-y border-[#fde2ec]/70">
+        <div className="page-container relative">
+          <Reveal className="mb-7 sm:mb-9">
+            <p className="text-[12px] font-semibold tracking-wide text-rose sm:text-[13px]">
+              {fees.eyebrow}
+            </p>
+            <h2 className="font-serif mt-1.5 text-[1.85rem] leading-tight font-normal tracking-tight text-ink sm:text-[2.35rem]">
+              {fees.title}
+            </h2>
+          </Reveal>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
+            {fees.items.map((item, i) => {
+              const Icon = i === 0 ? FaCalendarAlt : FaCheck;
+              const isInternational =
+                i === 1 || item.title.toLowerCase().includes("international");
+
+              return (
+                <Reveal key={item.title} delay={i * 0.06} className="h-full">
+                  <article
+                    className={`card-highlight flex h-full flex-col rounded-[22px] p-5 transition-all duration-300 hover:-translate-y-0.5 sm:p-6 ${
+                      isInternational
+                        ? "border border-white/15 text-white shadow-[0_14px_36px_rgba(6,21,50,0.32)]"
+                        : "border border-rose/20 bg-white text-ink shadow-[0_6px_24px_rgba(232,62,116,0.08)] hover:shadow-[0_12px_30px_rgba(232,62,116,0.14)]"
+                    }`}
+                    style={
+                      isInternational
+                        ? {
+                            background:
+                              "linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%)",
+                          }
+                        : undefined
+                    }
+                  >
+                    <div className="flex items-center gap-3.5">
+                      <span
+                        className={`inline-flex size-11 shrink-0 items-center justify-center rounded-xl text-white shadow-sm ${
+                          isInternational
+                            ? "bg-rose shadow-[0_4px_14px_rgba(232,62,116,0.4)]"
+                            : "card-badge bg-rose"
+                        }`}
+                      >
+                        <Icon className="size-4" aria-hidden />
+                      </span>
+                      <h3
+                        className={`font-serif text-[16.5px] font-semibold sm:text-[17.5px] ${
+                          isInternational ? "text-white" : "text-ink"
+                        }`}
+                      >
+                        {item.title}
+                      </h3>
+                    </div>
+
+                    <p
+                      className={`mt-3.5 text-[13.5px] leading-relaxed sm:text-[14.5px] ${
+                        isInternational ? "text-white/80" : "text-ink/80"
+                      }`}
+                    >
+                      {item.description}
+                    </p>
+                  </article>
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. FAQs (Pink) */}
+      <section className="relative overflow-hidden bg-pink py-8 sm:py-10 lg:py-12">
+        <div className="page-container relative">
+          <Reveal>
+            <p className="text-[12px] font-semibold tracking-wide text-rose sm:text-[13px]">
+              {faq.eyebrow}
+            </p>
+            <h2 className="font-serif mt-1.5 max-w-3xl text-[1.85rem] leading-tight font-normal tracking-tight text-ink sm:text-[2.35rem]">
+              {faq.title}
+            </h2>
+          </Reveal>
+
+          <FaqAccordion
+            leftItems={faqColumns[0].map((item) => ({
+              question: item.q,
+              answer: (
+                <>
+                  {item.a}
+                  {item.linkLabel && item.linkHref ? (
+                    <>
+                      {" "}
+                      <Link
+                        href={item.linkHref}
+                        className="font-semibold text-rose underline underline-offset-2 transition-colors hover:text-rose-dark"
+                      >
+                        {item.linkLabel}
+                      </Link>
+                    </>
+                  ) : null}
+                </>
+              ),
+            }))}
+            rightItems={faqColumns[1].map((item) => ({
+              question: item.q,
+              answer: (
+                <>
+                  {item.a}
+                  {item.linkLabel && item.linkHref ? (
+                    <>
+                      {" "}
+                      <Link
+                        href={item.linkHref}
+                        className="font-semibold text-rose underline underline-offset-2 transition-colors hover:text-rose-dark"
+                      >
+                        {item.linkLabel}
+                      </Link>
+                    </>
+                  ) : null}
+                </>
+              ),
+            }))}
+          />
+        </div>
+      </section>
+    </>
+  );
+}

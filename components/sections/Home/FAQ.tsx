@@ -1,0 +1,193 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import siteData from "@/data/site.json";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/Reveal";
+
+interface FaqItem {
+  id: string;
+  number: string;
+  question: string;
+  answer: string;
+}
+
+function FaqCard({
+  item,
+  isOpen,
+  onToggle,
+}: {
+  item: FaqItem;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <div
+      className={`rounded-[18px] border transition-[border-color,box-shadow,background-color] duration-300 ease-out sm:rounded-[20px] ${
+        isOpen
+          ? "border-[#fbcfe0] bg-white shadow-[0_8px_24px_rgba(230,53,110,0.08)] ring-1 ring-[#fecdd3]/40"
+          : "border-slate-100 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.03)] hover:border-slate-200 hover:shadow-[0_6px_18px_rgba(15,23,42,0.06)]"
+      }`}
+    >
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        className="group flex w-full cursor-pointer items-center justify-between gap-3 p-4 text-left select-none sm:p-[18px]"
+      >
+        <div className="flex min-w-0 items-center gap-3 sm:gap-3.5">
+          <span
+            className={`flex size-[34px] shrink-0 items-center justify-center rounded-full font-serif text-[13px] font-bold transition-colors duration-300 sm:size-[38px] sm:text-[14px] ${
+              isOpen
+                ? "bg-[#ffe4ee] text-[#e11d68]"
+                : "bg-[#fff0f5] text-[#e11d68] group-hover:bg-[#ffe4ee]"
+            }`}
+          >
+            {item.number}
+          </span>
+
+          <h3 className="font-serif text-[14.5px] leading-snug font-bold tracking-tight text-[#0f2038] sm:text-[15.5px]">
+            {item.question}
+          </h3>
+        </div>
+
+        <span
+          className={`relative flex size-7 shrink-0 items-center justify-center transition-colors duration-300 ${
+            isOpen ? "text-[#e11d68]" : "text-[#0f2038] group-hover:text-[#e11d68]"
+          }`}
+          aria-hidden
+        >
+          <span className="absolute h-[2px] w-[12px] rounded-full bg-current" />
+          <span
+            className={`absolute h-[12px] w-[2px] rounded-full bg-current transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              isOpen ? "scale-y-0 rotate-90" : "scale-y-100 rotate-0"
+            }`}
+          />
+        </span>
+      </button>
+
+      <div
+        className={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <div
+            className={`border-t border-[#fde8ef] px-[18px] pt-3 pb-[18px] text-[13px] leading-relaxed text-gray-500 transition-opacity duration-300 sm:text-[13.5px] ${
+              isOpen ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <p className="max-w-[540px] pl-0 sm:pl-[46px]">{item.answer}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function FAQ() {
+  const { eyebrow, titlePrefix, titleHighlight, cta, leftFaqs, rightFaqs } =
+    siteData.faq;
+
+  const [openId, setOpenId] = useState<string | null>("faq-01");
+  const listRef = useRef<HTMLDivElement>(null);
+  const [listMinHeight, setListMinHeight] = useState<number | undefined>();
+
+  const toggleFaq = (id: string) => {
+    setOpenId((prev) => (prev === id ? null : id));
+  };
+
+  useEffect(() => {
+    const node = listRef.current;
+    if (!node) return;
+
+    const lockHeight = () => {
+      const next = Math.ceil(node.getBoundingClientRect().height);
+      setListMinHeight((prev) => Math.max(prev ?? 0, next));
+    };
+
+    lockHeight();
+    const timer = window.setTimeout(lockHeight, 520);
+    return () => window.clearTimeout(timer);
+  }, [openId]);
+
+  return (
+    <section className="relative isolate overflow-hidden bg-white py-6 sm:py-7 lg:py-8">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-[420px] w-[120%] -translate-x-1/2 rounded-full"
+        style={{
+          background:
+            "radial-gradient(ellipse 65% 50% at 50% 25%, rgba(255,224,236,0.55) 0%, rgba(255,242,248,0.25) 45%, rgba(255,255,255,0) 75%)",
+        }}
+      />
+
+      <div className="page-container">
+        <Reveal>
+          <header className="mb-7 flex flex-col items-start justify-between gap-4 sm:mb-9 sm:flex-row sm:items-center">
+            <div>
+              {eyebrow ? (
+                <p className="mb-2 text-[12px] font-bold tracking-[0.14em] text-rose uppercase sm:text-[13px]">
+                  {eyebrow}
+                </p>
+              ) : null}
+              <h2 className="font-serif text-2xl font-bold tracking-tight text-ink sm:whitespace-nowrap sm:text-3xl lg:text-[2.2rem] xl:text-[2.75rem]">
+                <span>{titlePrefix}</span>
+                {titleHighlight ? (
+                  <>
+                    {" "}
+                    <span className="text-[#e11d68]">{titleHighlight}</span>
+                  </>
+                ) : null}
+              </h2>
+            </div>
+            {cta ? (
+              <a
+                href={cta.href}
+                className="inline-flex shrink-0 items-center rounded-full border border-[var(--ink)]/25 px-5 py-2.5 text-sm font-medium whitespace-nowrap text-ink transition-colors hover:border-[#e11d68] hover:text-[#e11d68]"
+              >
+                {cta.label}
+              </a>
+            ) : null}
+          </header>
+        </Reveal>
+
+        <div
+          ref={listRef}
+          className="grid grid-cols-1 items-start gap-4 lg:grid-cols-2 lg:gap-6"
+          style={listMinHeight ? { minHeight: listMinHeight } : undefined}
+        >
+          <Stagger className="flex flex-col gap-3.5 sm:gap-4" stagger={0.08}>
+            {leftFaqs.map((item) => (
+              <StaggerItem key={item.id} variant="slideLeft">
+                <FaqCard
+                  item={item}
+                  isOpen={openId === item.id}
+                  onToggle={() => toggleFaq(item.id)}
+                />
+              </StaggerItem>
+            ))}
+          </Stagger>
+
+          <Stagger
+            className="flex flex-col gap-3.5 sm:gap-4"
+            stagger={0.08}
+            delay={0.05}
+          >
+            {rightFaqs.map((item) => (
+              <StaggerItem key={item.id} variant="slideRight">
+                <FaqCard
+                  item={item}
+                  isOpen={openId === item.id}
+                  onToggle={() => toggleFaq(item.id)}
+                />
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export { FAQ as FAQSection };
+

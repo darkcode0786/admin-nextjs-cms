@@ -1,0 +1,1153 @@
+@import "tailwindcss";
+
+/* Global Brand Theme Colors & Fonts (All Pages) */
+:root {
+  --navy: #061532;
+  --navy-mid: #0a1f45;
+  --rose: #e83e74;
+  --rose-dark: #c53658;
+  --blue: #0047ca;
+  --blue-dark: #0037a3;
+  --pink: #fff5f7;
+  --ink: #0f2438;
+
+  --color-navy: var(--navy);
+  --color-navy-mid: var(--navy-mid);
+  --color-rose: var(--rose);
+  --color-rose-dark: var(--rose-dark);
+  --color-blue: var(--blue);
+  --color-blue-dark: var(--blue-dark);
+  --color-pink: var(--pink);
+  --color-ink: var(--ink);
+
+  --font-sans: var(--font-open-sans), Tahoma, sans-serif;
+  --font-serif: var(--font-open-sans), Tahoma, sans-serif;
+  --font-display: var(--font-open-sans), Tahoma, sans-serif;
+  --font-open-sans-family: var(--font-open-sans), Tahoma, sans-serif;
+  --font-poppins: var(--font-open-sans), Tahoma, sans-serif;
+  --font-poppins-family: var(--font-open-sans), Tahoma, sans-serif;
+  --font-tahoma-family: var(--font-open-sans), Tahoma, sans-serif;
+}
+
+@theme inline {
+  --color-navy: var(--navy);
+  --color-navy-mid: var(--navy-mid);
+  --color-rose: var(--rose);
+  --color-rose-dark: var(--rose-dark);
+  --color-blue: var(--blue);
+  --color-blue-dark: var(--blue-dark);
+  --color-pink: var(--pink);
+  --color-ink: var(--ink);
+
+  --font-sans: var(--font-open-sans), Tahoma, sans-serif;
+  --font-serif: var(--font-open-sans), Tahoma, sans-serif;
+  --font-display: var(--font-open-sans), Tahoma, sans-serif;
+  --font-open-sans: var(--font-open-sans), Tahoma, sans-serif;
+  --font-poppins: var(--font-open-sans), Tahoma, sans-serif;
+  --font-tahoma: var(--font-open-sans), Tahoma, sans-serif;
+}
+
+/* Global Base Styles & Typography (All Pages) */
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-ink);
+  background: var(--pink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  width: 100%;
+}
+
+.font-sans {
+  font-family: var(--font-sans) !important;
+}
+
+.font-display {
+  font-family: var(--font-display) !important;
+}
+
+.font-serif {
+  font-family: var(--font-serif) !important;
+}
+
+.font-open-sans {
+  font-family: var(--font-open-sans) !important;
+}
+
+.font-poppins {
+  font-family: var(--font-open-sans) !important;
+}
+
+.font-tahoma {
+  font-family: var(--font-tahoma) !important;
+}
+
+h1,
+h2 {
+  font-family: var(--font-open-sans), Tahoma, sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 1.65rem !important;
+  line-height: 1.18 !important;
+}
+
+@media (min-width: 640px) {
+
+  h1,
+  h2 {
+    font-size: 2.1rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+
+  h1,
+  h2 {
+    font-size: 2.35rem !important;
+  }
+}
+
+@media (min-width: 1280px) {
+
+  h1,
+  h2 {
+    font-size: 2.55rem !important;
+  }
+}
+
+/* Inner Pages: Typography Scale (Eyebrows, Subtitles, Cards & Tables) */
+main:not(.home-main) section:not(.parenthood-cta) :is(p, span):has(+ h1),
+main:not(.home-main) section:not(.parenthood-cta) :is(p, span):has(+ h2) {
+  font-size: 0.75rem !important;
+  line-height: 1.4 !important;
+}
+
+@media (min-width: 640px) {
+
+main:not(.home-main) section:not(.parenthood-cta) :is(p, span):has(+ h1),
+  main:not(.home-main) section:not(.parenthood-cta) :is(p, span):has(+ h2) {
+    font-size: 0.8125rem !important;
+  }
+}
+
+main:not(.home-main) section:has(.hero-banner-card) h1~p,
+main:not(.home-main) section:not(.parenthood-cta) h1+p,
+main:not(.home-main) section:not(.parenthood-cta) h2+p {
+  font-size: 0.875rem !important;
+  line-height: 1.62 !important;
+}
+
+@media (min-width: 640px) {
+
+  main:not(.home-main) section:has(.hero-banner-card) h1~p,
+  main:not(.home-main) section:not(.parenthood-cta) h1+p,
+  main:not(.home-main) section:not(.parenthood-cta) h2+p {
+    font-size: 0.9375rem !important;
+  }
+}
+
+main:not(.home-main) h3:not(:has(+ p.font-serif)):not(.uppercase),
+main:not(.home-main) h4,
+main:not(.home-main) button[aria-expanded]>span:first-child {
+  font-size: 1rem !important;
+  line-height: 1.35 !important;
+}
+
+@media (min-width: 640px) {
+
+  main:not(.home-main) h3:not(:has(+ p.font-serif)):not(.uppercase),
+  main:not(.home-main) h4,
+  main:not(.home-main) button[aria-expanded]>span:first-child {
+    font-size: 1.0625rem !important;
+  }
+}
+
+main:not(.home-main) h3:has(+ p.font-serif) {
+  font-size: 0.8125rem !important;
+  line-height: 1.35 !important;
+}
+
+main:not(.home-main) .card-highlight h3+p:not(.font-serif),
+main:not(.home-main) .card-highlight h4+p:not(.font-serif),
+main:not(.home-main) .card-highlight>div>div+div:not(.border-t),
+main:not(.home-main) .card-highlight>div+div:not(.border-t),
+main:not(.home-main) .card-highlight>p:not(.font-serif),
+main:not(.home-main) .card-highlight>div>h3+p:not(.font-serif),
+main:not(.home-main) .card-highlight>div>div>h3+p:not(.font-serif),
+main:not(.home-main) .card-highlight>div>div+p:not(.font-serif),
+main:not(.home-main) .treatment-section h3+p:not(.font-serif),
+main:not(.home-main) .treatment-section h3+div:not(.mt-6),
+main:not(.home-main) .treatment-section div:has(> span.signature-tick) p,
+main:not(.home-main) .treatment-section div:has(> span.signature-tick) h3+div,
+main:not(.home-main) .treatment-section div:has(> span > svg)>div:last-child:not([class*="mt-0"]),
+main:not(.home-main) .treatment-section button[aria-expanded]+div,
+main:not(.home-main) .treatment-section button[aria-expanded]+div p,
+main:not(.home-main) .treatment-section button[aria-expanded]+div li,
+main:not(.home-main) table tbody td {
+  font-size: 0.84375rem !important;
+  line-height: 1.6 !important;
+}
+
+@media (min-width: 640px) {
+
+  main:not(.home-main) .card-highlight h3+p:not(.font-serif),
+  main:not(.home-main) .card-highlight h4+p:not(.font-serif),
+  main:not(.home-main) .card-highlight>div>div+div:not(.border-t),
+  main:not(.home-main) .card-highlight>div+div:not(.border-t),
+  main:not(.home-main) .card-highlight>p:not(.font-serif),
+  main:not(.home-main) .card-highlight>div>h3+p:not(.font-serif),
+  main:not(.home-main) .card-highlight>div>div>h3+p:not(.font-serif),
+  main:not(.home-main) .card-highlight>div>div+p:not(.font-serif),
+  main:not(.home-main) .treatment-section h3+p:not(.font-serif),
+  main:not(.home-main) .treatment-section h3+div:not(.mt-6),
+  main:not(.home-main) .treatment-section div:has(> span.signature-tick) p,
+  main:not(.home-main) .treatment-section div:has(> span.signature-tick) h3+div,
+  main:not(.home-main) .treatment-section div:has(> span > svg)>div:last-child:not([class*="mt-0"]),
+  main:not(.home-main) .treatment-section button[aria-expanded]+div,
+  main:not(.home-main) .treatment-section button[aria-expanded]+div p,
+  main:not(.home-main) .treatment-section button[aria-expanded]+div li,
+  main:not(.home-main) table tbody td {
+    font-size: 0.875rem !important;
+  }
+}
+
+/* Inner Pages: Hero Banner Layout */
+.page-hero {
+  background: var(--pink);
+}
+
+@media (min-width: 1024px) {
+  section:has(.hero-banner-card) {
+    min-height: calc(100svh - var(--site-header-h, 8.75rem)) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    padding-top: 2.25rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+
+  section:has(.hero-banner-card) > .page-container {
+    align-items: center !important;
+  }
+
+  .hero-banner-card {
+    max-width: min(440px,
+        calc((100svh - var(--site-header-h, 8.75rem) - 2.5rem) * 0.8)) !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 820px) {
+  section:has(.hero-banner-card) nav[aria-label="Breadcrumb"] {
+    margin-bottom: 0.65rem !important;
+  }
+
+  section:has(.hero-banner-card) h1~p {
+    line-height: 1.55 !important;
+  }
+}
+
+section:has(.hero-fullwidth-banner) {
+  background: #fff !important;
+}
+
+section:has(.hero-fullwidth-banner) h1 ~ p,
+section:has(.hero-banner-card) h1 ~ p,
+main:not(.home-main) section:not(.parenthood-cta) h1 + p,
+main:not(.home-main) section:not(.parenthood-cta) h2 + p,
+main:not(.home-main) .card-highlight > p:not(.font-serif),
+main:not(.home-main) article p.leading-relaxed {
+  text-align: justify !important;
+}
+
+@media (min-width: 1024px) {
+  section:has(.hero-fullwidth-banner) {
+    height: clamp(460px, calc(100svh - var(--site-header-h, 8.75rem)), 620px) !important;
+    min-height: 460px !important;
+    max-height: 620px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: stretch !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    overflow: hidden !important;
+  }
+
+  section:has(.hero-fullwidth-banner) > 
+.page-container {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  section:has(.hero-fullwidth-banner) > .page-container > div {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    max-width: min(49%, 44rem) !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    margin-top: 0 !important;
+    padding-top: 1.25rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  section:has(.hero-fullwidth-banner) h1,
+  section:has(.hero-fullwidth-banner) h1 ~ p {
+    max-width: 100% !important;
+  }
+
+  section:has(.hero-fullwidth-banner) nav[aria-label="Breadcrumb"] {
+    margin-bottom: 0.75rem !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 820px) {
+  section:has(.hero-fullwidth-banner) {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  section:has(.hero-fullwidth-banner) > .page-container > div {
+    padding-top: 1.15rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+
+  section:has(.hero-fullwidth-banner) nav[aria-label="Breadcrumb"] {
+    margin-bottom: 0.65rem !important;
+  }
+
+  section:has(.hero-fullwidth-banner) h1 {
+    font-size: clamp(1.95rem, 2.9svh, 2.6rem) !important;
+    line-height: 1.18 !important;
+  }
+
+  section:has(.hero-fullwidth-banner) h1~p {
+    line-height: 1.6 !important;
+    font-size: clamp(14px, 1.75svh, 15.5px) !important;
+  }
+
+  section:has(.hero-fullwidth-banner) a.rounded-full {
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+    padding-left: 1.4rem !important;
+    padding-right: 1.4rem !important;
+    font-size: 13.5px !important;
+  }
+}
+
+.hero-overlay {
+  background:
+    linear-gradient(95deg,
+      rgba(4, 12, 28, 0.86) 0%,
+      rgba(5, 16, 36, 0.65) 26%,
+      rgba(6, 28, 58, 0.18) 48%,
+      transparent 60%,
+      transparent 74%,
+      rgba(5, 18, 40, 0.25) 100%),
+    linear-gradient(180deg,
+      rgba(4, 12, 28, 0.22) 0%,
+      transparent 16%,
+      transparent 78%,
+      rgba(4, 12, 28, 0.4) 100%);
+}
+
+/* Global Buttons (All Pages) */
+.btn-rose {
+  background: var(--color-rose);
+  color: #fff;
+  box-shadow: none;
+  transition: background 0.2s ease;
+}
+
+.btn-rose:hover {
+  background: var(--color-rose-dark);
+}
+
+.btn-outline {
+  border: 1.5px solid #ffffff;
+  background: transparent;
+  color: #fff;
+  box-shadow: none;
+  transition: background 0.2s ease;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-blue {
+  background: var(--color-blue);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(0, 71, 202, 0.28);
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn-blue:hover {
+  background: var(--color-blue-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0, 71, 202, 0.35);
+}
+
+/* Global Form Inputs (Contact, Book Appointment & Consultation Forms) */
+.field {
+  width: 100%;
+  border: 1px solid #d7dee8;
+  border-radius: 10px;
+  background: #fff;
+  padding: 0.72rem 0.85rem;
+  font-size: 13px;
+  color: var(--color-ink);
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.field::placeholder {
+  color: #94a3b8;
+}
+
+.field:focus {
+  border-color: var(--color-rose);
+  box-shadow: 0 0 0 3px rgba(232, 62, 116, 0.15);
+}
+
+.field-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  border: 1px solid #d7dee8;
+  border-radius: 10px;
+  background: #fff;
+  padding: 0.72rem 0.85rem;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.field-group:focus-within {
+  border-color: var(--color-rose);
+  box-shadow: 0 0 0 3px rgba(232, 62, 116, 0.15);
+}
+
+/* Hero Stat Cards & Slide Animations (Home & Inner Pages) */
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 14px;
+  background: rgba(8, 24, 48, 0.45);
+  padding: 1.05rem 0.9rem;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  background: rgba(8, 24, 48, 0.58);
+  border-color: rgba(255, 255, 255, 0.48);
+}
+
+.hero-fade-up {
+  animation: hero-fade-up 0.7s ease both;
+}
+
+.hero-copy>.hero-fade-up:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.hero-copy>.hero-fade-up:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.hero-copy>.hero-fade-up:nth-child(3) {
+  animation-delay: 0.18s;
+}
+
+.hero-copy>.hero-fade-up:nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+.hero-copy>.hero-fade-up:nth-child(5) {
+  animation-delay: 0.3s;
+}
+
+.hero-copy>.hero-fade-up:nth-child(6) {
+  animation-delay: 0.4s;
+}
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes storySlide {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.story-slide {
+  animation: storySlide 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Global Page Container (Navbar, Footer & All Pages) */
+.page-container {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+.page-container {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+.page-container {
+    padding-inline: 2rem;
+  }
+}
+
+:root {
+  --site-header-h: 8.75rem;
+}
+
+/* Home Page: Hero Slider & First Screen */
+.home-first-screen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.home-hero-wrap {
+  min-height: 0;
+}
+
+.hero-section {
+  min-height: auto;
+  height: 100%;
+}
+
+.hero-banner-frame {
+  top: 0;
+}
+
+.hero-veil {
+  background: linear-gradient(90deg,
+      rgba(6, 21, 50, 0.94) 0%,
+      rgba(10, 31, 69, 0.88) 22%,
+      rgba(10, 31, 69, 0.72) 38%,
+      rgba(6, 21, 50, 0.35) 52%,
+      transparent 64%);
+}
+
+.hero-content {
+  padding-top: 1.25rem;
+  padding-bottom: 1.75rem;
+  background-color: var(--hero-backdrop, #163f8a);
+}
+
+@media (min-width: 640px) {
+  .hero-content {
+    background-color: transparent;
+  }
+}
+
+.hero-title {
+  margin-top: 0.35rem;
+  font-size: clamp(2.35rem, 7.5vw, 2.9rem);
+  line-height: 1.08;
+}
+
+.hero-stats,
+.hero-ctas {
+  margin-top: 0;
+}
+
+@media (min-width: 640px) {
+  .hero-section {
+    min-height: 480px;
+  }
+
+  .hero-content {
+    padding-top: 2rem;
+    padding-bottom: 1.75rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.65rem, 4.2vw, 3.35rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-first-screen {
+    height: calc(100svh - var(--site-header-h));
+    min-height: calc(100svh - var(--site-header-h));
+    max-height: calc(100svh - var(--site-header-h));
+  }
+
+  .home-hero-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-section {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+  }
+
+  .hero-content {
+    padding-top: clamp(0.75rem, 1.8svh, 1.35rem);
+    padding-bottom: clamp(0.85rem, 2svh, 1.5rem);
+  }
+
+  .hero-copy {
+    gap: clamp(0.75rem, 1.6svh, 1.25rem) !important;
+  }
+
+  .hero-title {
+    margin-top: 0.2rem;
+    font-size: clamp(2.6rem, 4.8svh, 3.45rem);
+  }
+
+  .hero-review-badge {
+    margin-top: clamp(0.45rem, 1.2svh, 0.85rem) !important;
+  }
+
+  .hero-stats .stat-tile {
+    padding-block: clamp(0.45rem, 1.1svh, 0.85rem);
+  }
+
+  .hero-stats .stat-value {
+    font-size: clamp(1.75rem, 3.8svh, 2.45rem) !important;
+  }
+
+  .hero-stats .stat-label {
+    font-size: clamp(14px, 1.8svh, 16px) !important;
+  }
+
+  .hero-cta {
+    height: clamp(3rem, 6svh, 3.85rem) !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: clamp(13.5px, 2.1svh, 16px) !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-title {
+    font-size: clamp(3.1rem, 5.8svh, 4rem);
+  }
+
+  .hero-copy {
+    gap: clamp(0.9rem, 1.8svh, 1.4rem) !important;
+  }
+}
+
+/* Home Page: Credentials & Affiliations Ticker */
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-ticker {
+  display: flex;
+  width: max-content;
+  animation: ticker 28s linear infinite;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .hero-fade-up,
+  .btn-rose,
+  .btn-outline,
+.stat-card {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Inner Pages: Alternating Pink / White Section Backgrounds */
+.treatment-section {
+  background-color: var(--pink);
+}
+
+.treatment-section {
+  background-color: var(--pink);
+}
+
+main:not(.home-main) section.bg-white,
+main:not(.home-main) section.section-white,
+main:not(.home-main) section[data-bg="white"] {
+  background-color: #ffffff !important;
+  border-top: 1px solid rgba(232, 62, 116, 0.18) !important;
+  border-bottom: 1px solid rgba(232, 62, 116, 0.18) !important;
+}
+
+main:not(.home-main) section.bg-pink,
+main:not(.home-main) section.section-pink,
+main:not(.home-main) section[data-bg="pink"] {
+  background-color: var(--pink) !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+main:not(.home-main)> :nth-child(even),
+main:not(.home-main)> :nth-child(even)>section,
+main:not(.home-main)>div:nth-child(even)>section,
+main:not(.home-main)>section:nth-child(even) {
+  background-color: #ffffff !important;
+  border-top: 1px solid rgba(232, 62, 116, 0.18) !important;
+  border-bottom: 1px solid rgba(232, 62, 116, 0.18) !important;
+}
+
+main:not(.home-main)> :nth-child(odd):not(:first-child),
+main:not(.home-main)> :nth-child(odd):not(:first-child)>section,
+main:not(.home-main)>div:nth-child(odd):not(:first-child)>section,
+main:not(.home-main)>section:nth-child(odd):not(:first-child) {
+  background-color: var(--pink) !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+/* Shared CTA Section: Parenthood CTA Banner */
+main .parenthood-cta,
+main div:has(.parenthood-cta),
+main div:has(.parenthood-cta)>section {
+  background-color: #f4f0ea !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.signature-tick {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-dark) 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(232, 62, 116, 0.35) !important;
+}
+
+main:not(.home-main)> :nth-child(odd):not(:first-child) .signature-tick,
+main:not(.home-main)>div:nth-child(odd):not(:first-child) .signature-tick,
+main:not(.home-main)>div:nth-child(odd):not(:first-child) section .signature-tick,
+main:not(.home-main)>section:nth-child(odd):not(:first-child) .signature-tick {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(6, 21, 50, 0.35) !important;
+}
+
+main:not(.home-main)> :nth-child(even) .signature-tick,
+main:not(.home-main)>div:nth-child(even) .signature-tick,
+main:not(.home-main)>div:nth-child(even) section .signature-tick,
+main:not(.home-main)>section:nth-child(even) .signature-tick {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-dark) 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(232, 62, 116, 0.35) !important;
+}
+
+main:not(.home-main) section.bg-pink.bg-pink .signature-tick,
+main:not(.home-main)>div.bg-pink.bg-pink .signature-tick,
+main:not(.home-main) section[style*="var(--pink)"].relative .signature-tick {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(6, 21, 50, 0.35) !important;
+}
+
+main:not(.home-main) section.bg-white.bg-white .signature-tick,
+main:not(.home-main)>div.bg-white.bg-white .signature-tick {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-dark) 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(232, 62, 116, 0.35) !important;
+}
+
+.card-badge {
+  background-color: var(--rose) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(232, 62, 116, 0.4) !important;
+}
+
+main:not(.home-main)> :nth-child(odd):not(:first-child) .card-badge,
+main:not(.home-main)>div:nth-child(odd):not(:first-child) .card-badge,
+main:not(.home-main)>section:nth-child(odd):not(:first-child) .card-badge,
+main:not(.home-main)> :nth-child(odd):not(:first-child) .card-highlight :is(span, div).bg-rose,
+main:not(.home-main)>div:nth-child(odd):not(:first-child) .card-highlight :is(span, div).bg-rose,
+main:not(.home-main)>section:nth-child(odd):not(:first-child) .card-highlight :is(span, div).bg-rose,
+main:not(.home-main)> :nth-child(odd):not(:first-child) [class*="rounded-"] :is(span, div):is([class*="size-6"], [class*="size-7"], [class*="size-8"], [class*="size-9"], [class*="size-10"], [class*="size-11"]).bg-rose,
+main:not(.home-main)>div:nth-child(odd):not(:first-child) [class*="rounded-"] :is(span, div):is([class*="size-6"], [class*="size-7"], [class*="size-8"], [class*="size-9"], [class*="size-10"], [class*="size-11"]).bg-rose,
+main:not(.home-main)>section:nth-child(odd):not(:first-child) [class*="rounded-"] :is(span, div):is([class*="size-6"], [class*="size-7"], [class*="size-8"], [class*="size-9"], [class*="size-10"], [class*="size-11"]).bg-rose {
+  background-color: var(--navy) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(6, 21, 50, 0.35) !important;
+}
+
+main:not(.home-main)> :nth-child(even) .card-badge,
+main:not(.home-main)>div:nth-child(even) .card-badge,
+main:not(.home-main)>section:nth-child(even) .card-badge,
+main:not(.home-main)> :nth-child(even) .card-highlight :is(span, div):is(.bg-rose, .bg-blue, .bg-navy),
+main:not(.home-main)>div:nth-child(even) .card-highlight :is(span, div):is(.bg-rose, .bg-blue, .bg-navy),
+main:not(.home-main)>section:nth-child(even) .card-highlight :is(span, div):is(.bg-rose, .bg-blue, .bg-navy),
+main:not(.home-main)> :nth-child(even) [class*="rounded-"] :is(span, div):is([class*="size-6"], [class*="size-7"], [class*="size-8"], [class*="size-9"], [class*="size-10"], [class*="size-11"]):is(.bg-rose, .bg-blue, .bg-navy),
+main:not(.home-main)>div:nth-child(even) [class*="rounded-"] :is(span, div):is([class*="size-6"], [class*="size-7"], [class*="size-8"], [class*="size-9"], [class*="size-10"], [class*="size-11"]):is(.bg-rose, .bg-blue, .bg-navy),
+main:not(.home-main)>section:nth-child(even) [class*="rounded-"] :is(span, div):is([class*="size-6"], [class*="size-7"], [class*="size-8"], [class*="size-9"], [class*="size-10"], [class*="size-11"]):is(.bg-rose, .bg-blue, .bg-navy) {
+  background-color: var(--rose) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(232, 62, 116, 0.4) !important;
+}
+
+main:not(.home-main) section.bg-pink.bg-pink .card-badge,
+main:not(.home-main)>div.bg-pink.bg-pink .card-badge,
+main:not(.home-main) section[style*="var(--pink)"].relative .card-badge,
+main:not(.home-main) section.bg-pink.bg-pink .card-highlight :is(span, div).bg-rose,
+main:not(.home-main)>div.bg-pink.bg-pink .card-highlight :is(span, div).bg-rose,
+main:not(.home-main) section.bg-pink.bg-pink [class*="rounded-"] :is(span, div):is([class*="size-6"], [class*="size-7"], [class*="size-8"], [class*="size-9"], [class*="size-10"], [class*="size-11"]).bg-rose,
+main:not(.home-main)>div.bg-pink.bg-pink [class*="rounded-"] :is(span, div):is([class*="size-6"], [class*="size-7"], [class*="size-8"], [class*="size-9"], [class*="size-10"], [class*="size-11"]).bg-rose {
+  background-color: var(--navy) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(6, 21, 50, 0.35) !important;
+}
+
+main:not(.home-main) section.bg-white.bg-white .card-badge,
+main:not(.home-main)>div.bg-white.bg-white .card-badge,
+main:not(.home-main) section.bg-white.bg-white .card-highlight :is(span, div):is(.bg-rose, .bg-blue, .bg-navy),
+main:not(.home-main)>div.bg-white.bg-white .card-highlight :is(span, div):is(.bg-rose, .bg-blue, .bg-navy),
+main:not(.home-main) section.bg-white.bg-white [class*="rounded-"] :is(span, div):is([class*="size-6"], [class*="size-7"], [class*="size-8"], [class*="size-9"], [class*="size-10"], [class*="size-11"]):is(.bg-rose, .bg-blue, .bg-navy),
+main:not(.home-main)>div.bg-white.bg-white [class*="rounded-"] :is(span, div):is([class*="size-6"], [class*="size-7"], [class*="size-8"], [class*="size-9"], [class*="size-10"], [class*="size-11"]):is(.bg-rose, .bg-blue, .bg-navy) {
+  background-color: var(--rose) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(232, 62, 116, 0.4) !important;
+}
+
+main:not(.home-main)> :nth-child(odd):not(:first-child) span:is([class*="size-5"], [class*="size-6"]):is(.bg-rose\/15, .bg-rose\/20, .bg-blue\/15, .bg-blue\/20, .bg-blue\/25, .text-blue),
+main:not(.home-main)>div:nth-child(odd):not(:first-child) span:is([class*="size-5"], [class*="size-6"]):is(.bg-rose\/15, .bg-rose\/20, .bg-blue\/15, .bg-blue\/20, .bg-blue\/25, .text-blue),
+main:not(.home-main)>section:nth-child(odd):not(:first-child) span:is([class*="size-5"], [class*="size-6"]):is(.bg-rose\/15, .bg-rose\/20, .bg-blue\/15, .bg-blue\/20, .bg-blue\/25, .text-blue) {
+  background-color: rgba(6, 21, 50, 0.08) !important;
+  color: var(--navy) !important;
+  box-shadow: 0 0 0 1px rgba(6, 21, 50, 0.22) !important;
+}
+
+main:not(.home-main)> :nth-child(even) span:is([class*="size-5"], [class*="size-6"]):is(.bg-rose\/15, .bg-rose\/20, .bg-blue\/15, .bg-blue\/20, .bg-blue\/25, .text-blue),
+main:not(.home-main)>div:nth-child(even) span:is([class*="size-5"], [class*="size-6"]):is(.bg-rose\/15, .bg-rose\/20, .bg-blue\/15, .bg-blue\/20, .bg-blue\/25, .text-blue),
+main:not(.home-main)>section:nth-child(even) span:is([class*="size-5"], [class*="size-6"]):is(.bg-rose\/15, .bg-rose\/20, .bg-blue\/15, .bg-blue\/20, .bg-blue\/25, .text-blue) {
+  background-color: rgba(232, 62, 116, 0.15) !important;
+  color: var(--rose) !important;
+  box-shadow: 0 0 0 1px rgba(232, 62, 116, 0.35) !important;
+}
+
+main:not(.home-main) section.bg-pink.bg-pink span:is([class*="size-5"], [class*="size-6"]):is(.bg-rose\/15, .bg-rose\/20, .bg-blue\/15, .bg-blue\/20, .bg-blue\/25, .text-blue),
+main:not(.home-main)>div.bg-pink.bg-pink span:is([class*="size-5"], [class*="size-6"]):is(.bg-rose\/15, .bg-rose\/20, .bg-blue\/15, .bg-blue\/20, .bg-blue\/25, .text-blue),
+main:not(.home-main) section[style*="var(--pink)"].relative span:is([class*="size-5"], [class*="size-6"]):is(.bg-rose\/15, .bg-rose\/20, .bg-blue\/15, .bg-blue\/20, .bg-blue\/25, .text-blue) {
+  background-color: rgba(6, 21, 50, 0.08) !important;
+  color: var(--navy) !important;
+  box-shadow: 0 0 0 1px rgba(6, 21, 50, 0.22) !important;
+}
+
+main:not(.home-main) section.bg-white.bg-white span:is([class*="size-5"], [class*="size-6"]):is(.bg-rose\/15, .bg-rose\/20, .bg-blue\/15, .bg-blue\/20, .bg-blue\/25, .text-blue),
+main:not(.home-main)>div.bg-white.bg-white span:is([class*="size-5"], [class*="size-6"]):is(.bg-rose\/15, .bg-rose\/20, .bg-blue\/15, .bg-blue\/20, .bg-blue\/25, .text-blue) {
+  background-color: rgba(232, 62, 116, 0.15) !important;
+  color: var(--rose) !important;
+  box-shadow: 0 0 0 1px rgba(232, 62, 116, 0.35) !important;
+}
+
+main:not(.home-main)> :nth-child(odd):not(:first-child) [class*="rounded-"]>svg.text-rose,
+main:not(.home-main)>div:nth-child(odd):not(:first-child) [class*="rounded-"]>svg.text-rose,
+main:not(.home-main)>section:nth-child(odd):not(:first-child) [class*="rounded-"]>svg.text-rose,
+main:not(.home-main) section.bg-pink.bg-pink [class*="rounded-"]>svg.text-rose {
+  color: var(--navy) !important;
+}
+
+main:not(.home-main)> :nth-child(even) [class*="rounded-"]>svg:is(.text-rose, .text-blue),
+main:not(.home-main)>div:nth-child(even) [class*="rounded-"]>svg:is(.text-rose, .text-blue),
+main:not(.home-main)>section:nth-child(even) [class*="rounded-"]>svg:is(.text-rose, .text-blue),
+main:not(.home-main) section.bg-white.bg-white [class*="rounded-"]>svg:is(.text-rose, .text-blue) {
+  color: var(--rose) !important;
+}
+
+.card-highlight a.underline:hover,
+main a.text-blue.underline:hover,
+main a.font-medium.text-blue:hover,
+main a.underline:hover {
+  color: var(--rose) !important;
+  text-decoration-color: var(--rose) !important;
+}
+
+.bg-navy .card-badge,
+[style*="var(--navy)"] .card-badge,
+.bg-navy span.bg-rose,
+[style*="var(--navy)"] span.bg-rose,
+.bg-navy div.bg-rose,
+[style*="var(--navy)"] div.bg-rose {
+  background-color: var(--rose) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(232, 62, 116, 0.45) !important;
+}
+
+/* Inner Pages: Card Highlight Top Accent & Ambient Glow */
+.card-highlight {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.card-highlight::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 3px !important;
+  background: var(--rose) !important;
+  pointer-events: none !important;
+  z-index: 10 !important;
+}
+
+.card-highlight::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 140px !important;
+  height: 120px !important;
+  border-radius: 9999px !important;
+  background: radial-gradient(circle at top right,
+      rgba(232, 62, 116, 0.18) 0%,
+      rgba(232, 62, 116, 0.06) 45%,
+      transparent 70%) !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  filter: blur(14px) !important;
+}
+
+.cms-article .ProseMirror,
+.cms-article-preview {
+  min-height: 280px;
+  padding: 1.25rem 1.5rem 2rem;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.7;
+  outline: none;
+}
+
+.cms-article .ProseMirror h2,
+.cms-article-preview h2 {
+  margin: 1.75rem 0 0.75rem;
+  border-left: 3px solid var(--rose);
+  padding-left: 0.875rem;
+  font-size: 1.75rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.cms-article .ProseMirror h3,
+.cms-article-preview h3 {
+  margin: 1.25rem 0 0.35rem;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--rose);
+}
+
+.cms-article .ProseMirror p,
+.cms-article-preview p {
+  margin: 0.85rem 0;
+}
+
+.cms-article .ProseMirror a,
+.cms-article-preview a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--blue) 45%, transparent);
+  text-underline-offset: 2px;
+}
+
+.cms-article .ProseMirror h2 a,
+.cms-article-preview h2 a {
+  color: var(--ink);
+  text-decoration-color: color-mix(in srgb, var(--rose) 45%, transparent);
+  text-underline-offset: 4px;
+}
+
+.cms-article .ProseMirror h3 a,
+.cms-article-preview h3 a {
+  color: var(--rose);
+  text-decoration: none;
+}
+
+.cms-article .ProseMirror strong,
+.cms-article-preview strong {
+  font-weight: 700;
+}
+
+.cms-article .ProseMirror ul,
+.cms-article-preview ul {
+  margin: 0.75rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cms-article .ProseMirror ul li,
+.cms-article-preview ul li {
+  position: relative;
+  margin: 0.4rem 0;
+  padding-left: 1rem;
+}
+
+.cms-article .ProseMirror ul li::before,
+.cms-article-preview ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--rose);
+}
+
+.cms-article .ProseMirror ul[data-type="taskList"],
+.cms-article-preview ul[data-type="taskList"] {
+  margin: 0.75rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cms-article .ProseMirror ul[data-type="taskList"] li,
+.cms-article-preview ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin: 0.35rem 0;
+  padding-left: 0;
+}
+
+.cms-article .ProseMirror ul[data-type="taskList"] li::before,
+.cms-article-preview ul[data-type="taskList"] li::before {
+  content: "" !important;
+  position: static !important;
+  display: inline-block;
+  width: 1rem !important;
+  height: 1rem !important;
+  margin-top: 0.2rem;
+  border-radius: 0 !important;
+  background-color: color-mix(in srgb, var(--blue) 55%, white) !important;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M9.2 16.6 4.8 12.2l1.4-1.4 3 3 8.6-8.6 1.4 1.4z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M9.2 16.6 4.8 12.2l1.4-1.4 3 3 8.6-8.6 1.4 1.4z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.cms-article .ProseMirror ul[data-type="taskList"] label,
+.cms-article-preview ul[data-type="taskList"] label {
+  display: none;
+}
+
+.cms-article .ProseMirror ul[data-type="taskList"] li > div,
+.cms-article-preview ul[data-type="taskList"] li > div {
+  min-width: 0;
+  flex: 1;
+}
+
+.cms-article .ProseMirror ul[data-type="taskList"] p,
+.cms-article-preview ul[data-type="taskList"] p {
+  margin: 0;
+}
+
+.cms-article .ProseMirror ol,
+.cms-article-preview ol {
+  margin: 0.75rem 0;
+  padding-left: 1.25rem;
+  list-style: decimal;
+}
+
+.cms-article .ProseMirror ol li,
+.cms-article-preview ol li {
+  margin: 0.35rem 0;
+}
+
+.cms-article .ProseMirror ol li::marker,
+.cms-article-preview ol li::marker {
+  color: var(--rose);
+  font-weight: 600;
+}
+
+.cms-article .ProseMirror img,
+.cms-article-preview img {
+  margin: 1rem 0;
+  max-height: 320px;
+  border-radius: 12px;
+}
+
+.cms-article .ProseMirror table,
+.cms-article-preview table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+}
+
+.cms-article .ProseMirror th,
+.cms-article .ProseMirror td,
+.cms-article-preview th,
+.cms-article-preview td {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--rose) 20%, white);
+  text-align: left;
+}
+
+.cms-article .ProseMirror th,
+.cms-article-preview th {
+  background: var(--pink);
+  color: var(--rose);
+  font-weight: 700;
+}

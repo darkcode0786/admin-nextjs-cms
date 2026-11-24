@@ -1,0 +1,41 @@
+import mongoose from "mongoose";
+
+const globalForMongoose = globalThis as typeof globalThis & {
+  mongooseCache?: {
+    conn: typeof mongoose | null;
+    promise: Promise<typeof mongoose> | null;
+  };
+};
+
+const cache =
+  globalForMongoose.mongooseCache ??
+  { conn: null, promise: null };
+
+globalForMongoose.mongooseCache = cache;
+
+export async function connectDb() {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    throw new Error("MONGODB_URI is not set");
+  }
+
+  if (cache.conn) return cache.conn;
+
+  if (!cache.promise) {
+    cache.promise = mongoose
+      .connect(uri, {
+        serverSelectionTimeoutMS: 4000,
+        bufferCommands: false,
+      })
+      .then((connection) => connection);
+  }
+
+  try {
+    cache.conn = await cache.promise;
+    return cache.conn;
+  } catch (error) {
+    cache.promise = null;
+    cache.conn = null;
+    throw error;
+  }
+}

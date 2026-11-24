@@ -1,0 +1,236 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import siteData from "@/data/site.json";
+import StatsCards from "@/components/ui/StatsCards";
+import { CalendarIcon, PlayIcon } from "@/components/ui/Icons";
+import { FaStar } from "react-icons/fa";
+import { HeroReveal } from "@/components/ui/Reveal";
+
+const slideAlts = [
+  "Dr. Mona Dahiya receiving an award at the Times Network India Health Summit & Awards",
+  "Dr. Mona Dahiya, IVF specialist, in her white coat at her clinic",
+  "Dr. Mona Dahiya receiving a speaker certificate at the India IVF Summit & Awards",
+];
+
+export default function Hero() {
+  const {
+    slides: heroSlides,
+    backgroundImage,
+    eyebrow,
+    title,
+    primaryCta,
+    secondaryCta,
+    stats,
+  } = siteData.hero;
+
+  const slides =
+    heroSlides && heroSlides.length > 0
+      ? heroSlides
+      : [{ image: backgroundImage, eyebrow, title }];
+
+  const slideFits = ["object-cover", "object-cover"];
+
+  const slidePositions = [
+    // Award group — headroom clear of navbar
+    "object-right sm:object-[92%_15%]",
+    // Outdoor portrait — doctor on right, clear headroom
+    "object-right sm:object-[95%_12%]",
+  ];
+
+  const slideBackdrops = ["#2b48d8", "#122a52"];
+  const slideBackdropFills = [
+    "linear-gradient(180deg, #2245d5 0%, #353ecb 35%, #3f3ab0 70%, #443ea8 100%)",
+    "#122a52",
+  ];
+
+  const slideVeils = [
+    "linear-gradient(90deg, rgba(34,69,213,0.65) 0%, rgba(38,72,216,0.3) 30%, transparent 55%)",
+    "linear-gradient(90deg, rgba(12,32,70,0.85) 0%, rgba(14,38,85,0.45) 28%, transparent 52%)",
+  ];
+
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const interval = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
+  const currentSlide = slides[activeSlide] || slides[0];
+  const activeBackdrop =
+    slideBackdrops[activeSlide % slideBackdrops.length] || "#163f8a";
+  const activeVeil =
+    slideVeils[activeSlide % slideVeils.length] || slideVeils[1];
+
+  return (
+    <section
+      className="hero-section relative flex w-full flex-col overflow-x-hidden transition-colors duration-700"
+      style={
+        {
+          backgroundColor: activeBackdrop,
+          "--hero-backdrop": activeBackdrop,
+        } as React.CSSProperties
+      }
+    >
+      <div className="hero-banner-frame relative h-[250px] w-full shrink-0 overflow-hidden sm:absolute sm:inset-0 sm:h-auto">
+        {slides.map((slideItem, index) => {
+          const isActive = index === activeSlide;
+          const src = slideItem.image;
+          const backdrop =
+            slideBackdrops[index % slideBackdrops.length] || "#163f8a";
+          const backdropFill =
+            slideBackdropFills[index % slideBackdropFills.length] || backdrop;
+          return (
+            <div
+              key={src}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                isActive
+                  ? "z-10 opacity-100"
+                  : "pointer-events-none z-0 opacity-0"
+              }`}
+              style={{
+                backgroundColor: backdrop,
+                backgroundImage:
+                  typeof backdropFill === "string" &&
+                  backdropFill.startsWith("linear")
+                    ? backdropFill
+                    : undefined,
+              }}
+            >
+              <Image
+                src={src}
+                alt={slideAlts[index] ?? `Dr. Mona Dahiya banner slide ${index + 1}`}
+                fill
+                priority={index === 0}
+                quality={100}
+                unoptimized
+                className={`hero-banner-img ${slideFits[index % slideFits.length]} ${slidePositions[index % slidePositions.length]}`}
+                sizes="100vw"
+              />
+            </div>
+          );
+        })}
+
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-10 sm:hidden"
+          style={{
+            background: `linear-gradient(to top, ${activeBackdrop}, transparent)`,
+          }}
+        />
+
+        {slides.length > 1 && (
+          <div className="absolute right-4 bottom-3 z-30 flex items-center gap-1.5 sm:hidden">
+            {slides.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => setActiveSlide(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+                className={`h-1.5 cursor-pointer rounded-full transition-all duration-300 ${
+                  activeSlide === idx
+                    ? "w-6 bg-white shadow-sm"
+                    : "w-1.5 bg-white/55 hover:bg-white/80"
+                }`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Left readability veil — hue matches active slide backdrop */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-10 hidden transition-[background] duration-700 sm:block"
+        style={{ background: activeVeil }}
+      />
+
+      <div className="page-container hero-content relative z-20 flex flex-1 items-center pt-5 pb-7">
+        <div className="hero-copy flex w-full min-w-0 max-w-[430px] flex-col gap-4 sm:max-w-[460px] sm:gap-4.5 xl:max-w-[490px] xl:gap-5">
+          <HeroReveal
+            key={`eyebrow-${activeSlide}`}
+            delay={0.05}
+            className="w-full min-w-0"
+          >
+            <p className="hero-eyebrow text-[12px] font-semibold tracking-[0.13em] text-white/90 uppercase transition-all duration-500 sm:text-[13.5px] sm:tracking-[0.16em] lg:text-[14px] xl:text-[15px] xl:tracking-[0.18em]">
+              {currentSlide.eyebrow || eyebrow}
+            </p>
+            <h1 className="hero-title font-display font-bold tracking-tight text-white transition-all duration-500">
+              {currentSlide.title || title}
+            </h1>
+          </HeroReveal>
+
+          <HeroReveal delay={0.22} className="w-full min-w-0">
+            <div className="hero-stats w-full max-w-[420px] sm:max-w-[450px] xl:max-w-[480px]">
+              <StatsCards stats={stats} />
+            </div>
+          </HeroReveal>
+
+          <HeroReveal delay={0.32} className="w-full min-w-0">
+            <div className="hero-ctas flex w-full max-w-[420px] flex-col gap-2.5 min-[350px]:flex-row sm:grid sm:max-w-[450px] sm:grid-cols-2 sm:gap-3.5 xl:max-w-[480px] xl:gap-4">
+              <a
+                href={primaryCta.href}
+                className="hero-cta inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-full bg-rose px-3.5 text-[12.5px] font-bold whitespace-nowrap text-white shadow-[0_10px_24px_rgba(232,62,116,0.35)] transition-all hover:bg-rose-dark min-[350px]:w-auto min-[350px]:flex-auto min-[390px]:gap-2 min-[390px]:text-[13.5px] sm:h-12.5 sm:w-full sm:gap-2.5 sm:px-4 sm:text-[14.5px] xl:h-[3.45rem] xl:text-[15.5px]"
+              >
+                <CalendarIcon className="size-3.5 shrink-0 min-[390px]:size-4 sm:size-4.5 xl:size-5" />
+                {primaryCta.label}
+              </a>
+              <a
+                href={secondaryCta.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hero-cta inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-full border border-white/55 bg-transparent px-3.5 text-[12.5px] font-bold whitespace-nowrap text-white transition-all hover:bg-white/10 min-[350px]:w-auto min-[350px]:flex-auto min-[390px]:gap-2 min-[390px]:text-[13.5px] sm:h-12.5 sm:w-full sm:gap-2.5 sm:px-4 sm:text-[14.5px] xl:h-[3.45rem] xl:text-[15.5px]"
+              >
+                <span className="inline-flex h-[15px] w-[20px] shrink-0 items-center justify-center rounded-[4px] bg-[#e50914] text-white sm:h-[17px] sm:w-[23px] xl:h-[19px] xl:w-[25px]">
+                  <PlayIcon className="ml-0.5 size-2.5 fill-white text-white sm:size-3 xl:size-3" />
+                </span>
+                {secondaryCta.label}
+              </a>
+            </div>
+          </HeroReveal>
+
+          <HeroReveal delay={0.4} className="w-full min-w-0">
+            <div className="hero-review-badge flex w-full max-w-[420px] items-center justify-center gap-1.5 rounded-2xl border border-[#fed7aa] bg-[#fffbf2] px-3 py-2 shadow-sm backdrop-blur-md min-[360px]:rounded-full sm:w-fit sm:max-w-none sm:justify-start sm:gap-2.5 sm:rounded-full sm:px-4 sm:whitespace-nowrap xl:px-5 xl:py-2.5">
+              <div className="flex shrink-0 items-center gap-0.5 text-[#f59e0b]">
+                <FaStar className="size-3 fill-current min-[390px]:size-3.5 sm:size-4 xl:size-4.5" />
+                <FaStar className="size-3 fill-current min-[390px]:size-3.5 sm:size-4 xl:size-4.5" />
+                <FaStar className="size-3 fill-current min-[390px]:size-3.5 sm:size-4 xl:size-4.5" />
+                <FaStar className="size-3 fill-current min-[390px]:size-3.5 sm:size-4 xl:size-4.5" />
+                <FaStar className="size-3 fill-current min-[390px]:size-3.5 sm:size-4 xl:size-4.5" />
+              </div>
+              <span className="shrink-0 text-[12px] font-bold text-ink min-[390px]:text-[13px] sm:text-[14px] xl:text-[15px]">
+                4.9
+              </span>
+              <span className="min-w-0 text-[11px] leading-tight font-medium text-ink/80 min-[375px]:text-[11.5px] min-[400px]:text-[12px] sm:text-[13px] sm:whitespace-nowrap xl:text-[14px]">
+                {siteData.hero.googleReviewsLabel ??
+                  "Read Dr. Mona Dahiya's Google reviews"}
+              </span>
+            </div>
+          </HeroReveal>
+        </div>
+      </div>
+
+      {slides.length > 1 && (
+        <div className="absolute right-6 bottom-3.5 z-30 hidden items-center gap-2 sm:right-7 sm:bottom-4 sm:flex">
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => setActiveSlide(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+              className={`h-2 cursor-pointer rounded-full transition-all duration-300 ${
+                activeSlide === idx
+                  ? "w-7 bg-white shadow-sm"
+                  : "w-2 bg-white/50 hover:bg-white/80"
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}

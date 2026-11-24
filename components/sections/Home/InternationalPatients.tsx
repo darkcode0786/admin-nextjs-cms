@@ -1,0 +1,128 @@
+"use client";
+
+import Image from "next/image";
+import { FaPhoneAlt, FaPlane } from "react-icons/fa";
+import siteData from "@/data/site.json";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/Reveal";
+
+function WorldMapArt() {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 520 280"
+      className="pointer-events-none absolute top-[8%] right-[-2%] h-[78%] w-[58%] text-[#9ec4ff] opacity-[0.22]"
+      fill="currentColor"
+    >
+      <path
+        d="M70 210 C160 150, 250 120, 360 90 S470 50, 500 40"
+        fill="none"
+        stroke="white"
+        strokeWidth="2"
+        strokeDasharray="4 6"
+        opacity="0.7"
+      />
+    </svg>
+  );
+}
+
+export default function InternationalPatients() {
+  const data = siteData.internationalPatients;
+
+  return (
+    <section
+      id="international"
+      className="relative overflow-hidden bg-white py-6 sm:py-7 lg:py-8"
+    >
+      <div className="page-container">
+        <div className="relative isolate overflow-hidden rounded-[26px] bg-navy shadow-xl sm:rounded-[32px]">
+          <div className="absolute inset-0">
+            <Image
+              src={data.image}
+              alt="Mother holding baby — international IVF patients"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-[75%_center] sm:object-[80%_center] lg:object-[86%_center]"
+            />
+          </div>
+
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(12,36,31,0.98) 0%, rgba(12,36,31,0.95) 32%, rgba(12,36,31,0.85) 46%, rgba(12,36,31,0.48) 60%, rgba(12,36,31,0.12) 74%, transparent 90%)",
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 lg:hidden"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(12,36,31,0.95) 0%, rgba(12,36,31,0.88) 55%, rgba(12,36,31,0.45) 100%)",
+            }}
+          />
+
+          <WorldMapArt />
+
+          <FaPlane
+            aria-hidden
+            className="pointer-events-none absolute top-7 right-10 z-[2] hidden size-8 rotate-[18deg] text-white/75 lg:block xl:size-9"
+          />
+
+          <Reveal
+            variant="slideLeft"
+            className="relative z-10 px-6 py-10 sm:px-9 sm:py-12 lg:max-w-[58%] lg:px-11 lg:py-14 xl:px-12"
+          >
+            <div className="mb-4 flex items-center gap-2">
+              <span className="size-1.5 rounded-full bg-rose" />
+              <span className="text-[11px] font-bold tracking-[0.2em] text-rose uppercase sm:text-xs">
+                {data.badge}
+              </span>
+            </div>
+
+            <h2 className="max-w-xl font-serif text-[1.75rem] leading-[1.2] font-bold tracking-tight text-white sm:text-[2.25rem] lg:text-[2.55rem]">
+              {data.title}
+            </h2>
+
+            <p className="mt-3.5 max-w-lg text-[13px] leading-relaxed text-white/75 sm:text-[14.5px]">
+              {data.subtitle}
+            </p>
+
+            <Stagger
+              className="mt-7 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-3"
+              stagger={0.08}
+            >
+              {data.features.map((feature) => (
+                <StaggerItem key={feature.id} variant="scaleIn">
+                  <div className="inline-flex max-w-full w-fit items-center rounded-full border border-white/40 bg-transparent px-3.5 py-2 sm:px-4">
+                    <span className="text-[11.5px] font-medium text-white sm:whitespace-nowrap sm:text-[13px]">
+                      {feature.label}
+                    </span>
+                  </div>
+                </StaggerItem>
+              ))}
+            </Stagger>
+
+            <Reveal delay={0.2} className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-nowrap sm:items-center">
+              <a
+                href={data.primaryCta.href}
+                className="inline-flex shrink-0 items-center justify-center rounded-full bg-white px-6 py-3.5 text-[13.5px] font-semibold whitespace-nowrap text-navy transition hover:bg-white/90 sm:text-[14px]"
+              >
+                {data.primaryCta.label}
+              </a>
+              <a
+                href={data.secondaryCta.href}
+                className="inline-flex shrink-0 items-center justify-center gap-2.5 rounded-full bg-blue px-6 py-3.5 text-[13.5px] font-semibold whitespace-nowrap text-white transition hover:bg-blue-dark sm:text-[14px]"
+              >
+                <FaPhoneAlt className="size-3.5 shrink-0" />
+                {data.secondaryCta.label}
+              </a>
+            </Reveal>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+

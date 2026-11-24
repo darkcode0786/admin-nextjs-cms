@@ -1,0 +1,387 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import Breadcrumb, { type BreadcrumbItem } from "@/components/ui/Breadcrumb";
+import JsonLd from "@/components/seo/JsonLd";
+import { getBreadcrumbSchema } from "@/data/schemaData";
+import {
+  BLOG_BREADCRUMB_MAP,
+  LOCATION_BREADCRUMB_MAP,
+} from "@/data/breadcrumbMap";
+
+const ROUTE_BREADCRUMBS: Record<string, BreadcrumbItem[]> = {
+  "/404": [{ label: "Error" }, { label: "Page Not Found" }],
+  "/about-mona-dahiya": [
+    { label: "About Dr. Mona", href: "/about-mona-dahiya" },
+    { label: "Credentials & Bio" },
+  ],
+  "/art-compliance-ethics": [
+    { label: "About Dr. Mona", href: "/about-mona-dahiya" },
+    { label: "ART Compliance & Ethics Policy" },
+  ],
+  "/azoospermia-treatment": [
+    { label: "Conditions Treated", href: "/male-infertility-treatment" },
+    { label: "Azoospermia" },
+  ],
+  "/best-egg-freezing-center-in-noida": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Egg Freezing Center in Noida" },
+  ],
+  "/best-female-infertility-doctor-in-noida": [
+    { label: "Conditions Treated", href: "/female-infertility-treatment" },
+    { label: "Female Infertility Doctor Noida" },
+  ],
+  "/best-iui-doctor-in-delhi": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "IUI Doctor in Delhi" },
+  ],
+  "/best-iui-doctor-in-ghaziabad": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "IUI Doctor in Ghaziabad" },
+  ],
+  "/best-iui-doctor-in-noida": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "IUI Doctor in Noida" },
+  ],
+  "/best-ivf-doctor-in-delhi": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "IVF Doctor in Delhi" },
+  ],
+  "/best-ivf-doctor-in-ghaziabad": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "IVF Doctor in Ghaziabad" },
+  ],
+  "/best-ivf-doctor-in-noida": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "IVF Doctor in Noida" },
+  ],
+  "/best-ivf-patient-reviews": [
+    { label: "Success Stories", href: "/success-stories" },
+    { label: "IVF patient reviews" },
+  ],
+  "/best-laparoscopic-surgeon-in-noida": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Best Laparoscopic Surgeon in Noida" },
+  ],
+  "/best-laser-assisted-hatching-doctor-in-noida": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Laser Assisted Hatching" },
+  ],
+  "/best-low-amh-treatment-in-noida": [
+    { label: "Conditions Treated", href: "/female-infertility-treatment" },
+    { label: "Low AMH Treatment in Noida" },
+  ],
+  "/best-male-infertility-doctor-in-noida": [
+    { label: "Conditions Treated", href: "/male-infertility-treatment" },
+    { label: "Male Infertility Doctor Noida" },
+  ],
+  "/best-pcos-pcod-treatment-centre-in-noida": [
+    { label: "Conditions Treated", href: "/female-infertility-treatment" },
+    { label: "PCOS & PCOD Management" },
+  ],
+  "/blastocyst-transfer": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Blastocyst Transfer in Delhi NCR" },
+  ],
+  "/blog": [
+    { label: "Patient Resources", href: "/ivf-faqs" },
+    { label: "Fertility & IVF Blog" },
+  ],
+  "/book-appointment": [
+    { label: "Patient Resources", href: "/ivf-faqs" },
+    { label: "Book Appointment" },
+  ],
+  "/comprehensive-ivf-faqs": [
+    { label: "Patient Resources", href: "/ivf-faqs" },
+    { label: "Comprehensive IVF FAQs" },
+  ],
+  "/contact-us": [
+    { label: "Patient Resources", href: "/ivf-faqs" },
+    { label: "Contact Dr. Mona Dahiya" },
+  ],
+  "/donor-gametes": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Donor Gamete IVF in Delhi NCR" },
+  ],
+  "/embryo-cryopreservation": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Embryo Freezing (Cryopreservation)" },
+  ],
+  "/endometrial-receptivity-analysis-era-test-in-noida": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "ERA Test in Noida" },
+  ],
+  "/endometriosis-fertility-treatment": [
+    { label: "Conditions Treated", href: "/female-infertility-treatment" },
+    { label: "Endometriosis & Adenomyosis" },
+  ],
+  "/fallopian-tube-blockage-treatment": [
+    { label: "Conditions Treated", href: "/female-infertility-treatment" },
+    { label: "Fallopian Tube Blockage" },
+  ],
+  "/fertility-assessment-quiz": [{ label: "Fertility Assessment Quiz" }],
+  "/female-infertility-treatment": [
+    { label: "Conditions Treated", href: "/female-infertility-treatment" },
+    { label: "Female Infertility Treatment in Delhi NCR" },
+  ],
+  "/follicular-ultrasound": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Follicular Ultrasound Monitoring in Delhi NCR" },
+  ],
+  "/frozen-embryo-transfer": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Frozen Embryo Transfer (FET)" },
+  ],
+  "/gallery": [
+    { label: "About Dr. Mona", href: "/about-mona-dahiya" },
+    { label: "Gallery" },
+  ],
+  "/hysteroscopy-treatment": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Diagnostic & Operative Hysteroscopy" },
+  ],
+  "/international-ivf-patient": [
+    { label: "Patient Resources", href: "/ivf-faqs" },
+    { label: "International Patients" },
+  ],
+  "/intracytoplasmic-sperm-injection-icsi-treatment": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "ICSI Treatment in Delhi NCR" },
+  ],
+  "/iui-stories": [
+    { label: "Success Stories", href: "/success-stories" },
+    { label: "IUI Success Stories" },
+  ],
+  "/iui-treatment": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "IUI Treatment in Delhi NCR" },
+  ],
+  "/ivf-consultation-online": [
+    { label: "Patient Resources", href: "/ivf-faqs" },
+    { label: "Online Consultation" },
+  ],
+  "/ivf-cost-emi": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "IVF Cost and EMI Financing in Delhi NCR" },
+  ],
+  "/ivf-cost-insurance-financing": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "IVF Cost and EMI Financing in Delhi NCR" },
+  ],
+  "/ivf-faqs": [
+    { label: "Patient Resources", href: "/ivf-faqs" },
+    { label: "IVF FAQs" },
+  ],
+  "/ivf-stories": [
+    { label: "Success Stories", href: "/success-stories" },
+    { label: "IVF Success Stories" },
+  ],
+  "/ivf-treatment": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "IVF Treatment in Delhi NCR" },
+  ],
+  "/location": [{ label: "Locations" }],
+  "/low-amh-stories": [
+    { label: "Success Stories", href: "/success-stories" },
+    { label: "Low AMH Success Stories" },
+  ],
+  "/low-sperm-count-oligospermia": [
+    { label: "Conditions Treated", href: "/male-infertility-treatment" },
+    { label: "Low Sperm Count & Motility" },
+  ],
+  "/male-infertility-treatment": [
+    { label: "Conditions Treated", href: "/male-infertility-treatment" },
+    { label: "Male Infertility Treatment in Delhi | Noida | Ghaziabad" },
+  ],
+  "/medical-disclaimer": [
+    { label: "Legal" },
+    { label: "Medical Disclaimer" },
+  ],
+  "/minimal-stimulation-mini-ivf": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Mini IVF in Delhi NCR" },
+  ],
+  "/miscarriage-treatment-in-noida": [
+    { label: "Conditions Treated", href: "/female-infertility-treatment" },
+    { label: "Recurrent Miscarriages (RPL)" },
+  ],
+  "/news-and-media": [
+    { label: "About Dr. Mona", href: "/about-mona-dahiya" },
+    { label: "News & Media" },
+  ],
+  "/oncofertility-cancer-fertility-preservation": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Oncofertility in Delhi NCR" },
+  ],
+  "/our-services": [{ label: "Our Services" }],
+  "/pcos-stories": [
+    { label: "Success Stories", href: "/success-stories" },
+    { label: "PCOS Success Stories" },
+  ],
+  "/platelet-rich-plasma-prp-ivf-treatment-in-noida": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "PRP IVF Treatment in Noida" },
+  ],
+  "/preimplantation-genetic-testing-pgt-center-in-noida": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Preimplantation Genetic Testing (PGT)" },
+  ],
+  "/privacy-policy": [{ label: "Legal" }, { label: "Privacy Policy" }],
+  "/recurrent-implantation-failure-rif": [
+    { label: "Conditions Treated", href: "/female-infertility-treatment" },
+    { label: "Recurrent Implantation Failure (RIF)" },
+  ],
+  "/refund-and-cancellation-policy": [
+    { label: "Legal" },
+    { label: "Refund & Cancellation Policy" },
+  ],
+  "/second-opinion-failed-ivf": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Second Opinion for Failed IVF in Delhi NCR" },
+  ],
+  "/semen-sperm-freezing": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Semen & Sperm Freezing" },
+  ],
+  "/sitemap": [{ label: "Sitemap" }],
+  "/sitemap.html": [{ label: "Sitemap" }],
+  "/sperm-dna-fragmentation-test": [
+    { label: "Conditions Treated", href: "/male-infertility-treatment" },
+    { label: "Sperm DNA Fragmentation Index (DFI)" },
+  ],
+  "/success-stories": [
+    { label: "Success Stories", href: "/success-stories" },
+    { label: "All Success Stories" },
+  ],
+  "/surgical-sperm-retrieval-tesa-pesa": [
+    { label: "Treatments", href: "/our-services" },
+    { label: "Surgical Sperm Retrieval (TESA/PESA/Micro-TESE)" },
+  ],
+  "/terms-of-service": [{ label: "Legal" }, { label: "Terms of Service" }],
+};
+
+function formatSlugFallback(pathname: string): BreadcrumbItem[] {
+  const segment = pathname.split("/").filter(Boolean).pop() ?? "";
+  const label = segment
+    .split("-")
+    .map((w) => (w ? w[0].toUpperCase() + w.slice(1) : ""))
+    .join(" ");
+  return [{ label: label || "Page" }];
+}
+
+function getBreadcrumbItems(pathname: string): BreadcrumbItem[] | null {
+  const normalized = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+
+  if (normalized === "/" || !normalized) {
+    return null;
+  }
+
+  if (ROUTE_BREADCRUMBS[normalized]) {
+    return ROUTE_BREADCRUMBS[normalized];
+  }
+
+  if (normalized.startsWith("/blog/")) {
+    const slug = normalized.slice("/blog/".length);
+    const entry = BLOG_BREADCRUMB_MAP[slug];
+    return [
+      { label: "Patient Resources", href: "/ivf-faqs" },
+      { label: "Fertility & IVF Blog", href: "/blog" },
+      { label: entry ? entry.label : formatSlugFallback(normalized)[0].label },
+    ];
+  }
+
+  if (normalized.startsWith("/location/")) {
+    const slug = normalized.slice("/location/".length);
+    const entry = LOCATION_BREADCRUMB_MAP[slug];
+    if (entry) {
+      return [
+        { label: entry.parentLabel, href: entry.parentHref },
+        { label: entry.label },
+      ];
+    }
+    return [{ label: "Locations", href: "/location" }, ...formatSlugFallback(normalized)];
+  }
+
+  return formatSlugFallback(normalized);
+}
+
+function adminBreadcrumbs(pathname: string, title: string | null): BreadcrumbItem[] | null {
+  if (pathname === "/admin/login" || pathname.startsWith("/admin/preview")) return null;
+  if (pathname === "/admin") return [{ label: "Dashboard" }];
+
+  const blogId = pathname.match(/^\/admin\/blogs\/([^/]+)$/);
+  if (pathname === "/admin/blogs") {
+    return [{ label: "Admin", href: "/admin" }, { label: "Blogs" }];
+  }
+  if (blogId) {
+    return [
+      { label: "Admin", href: "/admin" },
+      { label: "Blogs", href: "/admin/blogs" },
+      { label: blogId[1] === "new" ? "New blog" : title || "Blog" },
+    ];
+  }
+
+  const locationId = pathname.match(/^\/admin\/locations\/([^/]+)$/);
+  if (pathname === "/admin/locations") {
+    return [{ label: "Admin", href: "/admin" }, { label: "Location pages" }];
+  }
+  if (locationId) {
+    return [
+      { label: "Admin", href: "/admin" },
+      { label: "Location pages", href: "/admin/locations" },
+      { label: locationId[1] === "new" ? "New location" : title || "Location" },
+    ];
+  }
+
+  return [{ label: "Admin", href: "/admin" }];
+}
+
+export default function BreadcrumbBar() {
+  const pathname = usePathname() || "/";
+  const [recordTitle, setRecordTitle] = useState<string | null>(null);
+  const recordMatch = pathname.match(/^\/admin\/(blogs|locations)\/(?!new$)([^/]+)$/);
+
+  useEffect(() => {
+    if (!recordMatch) {
+      setRecordTitle(null);
+      return;
+    }
+    const kind = recordMatch[1];
+    const id = recordMatch[2];
+    let active = true;
+    fetch(`/api/admin/${kind}/${id}`)
+      .then(async (response) => {
+        if (!response.ok) return null;
+        return response.json();
+      })
+      .then((data) => {
+        if (!active || !data) return;
+        setRecordTitle(data.content?.hero?.title || data.slug || null);
+      })
+      .catch(() => {
+        if (active) setRecordTitle(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, [pathname]);
+
+  const items = pathname.startsWith("/admin")
+    ? adminBreadcrumbs(pathname, recordTitle)
+    : getBreadcrumbItems(pathname);
+
+  if (!items || items.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="w-full bg-slate-200 py-2.5 sm:py-3">
+      <JsonLd data={getBreadcrumbSchema(pathname, items)} />
+      <div className="page-container">
+        <Breadcrumb items={items} inline />
+      </div>
+    </div>
+  );
+}
+

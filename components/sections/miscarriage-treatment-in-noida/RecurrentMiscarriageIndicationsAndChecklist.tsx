@@ -1,0 +1,169 @@
+"use client";
+
+import type { ReactNode } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/Reveal";
+import {
+  TreatmentSection,
+  TreatmentSectionHeader,
+  NumberedCard,
+  ChecklistRow,
+} from "@/components/ui/treatment";
+
+const indications: { number: string; title: string; description: ReactNode }[] =
+  [
+    {
+      number: "1",
+      title: "2 or more miscarriages",
+      description: "If you have lost a pregnancy before 20 weeks twice.",
+    },
+    {
+      number: "2",
+      title: "Loss of heartbeat after early scan",
+      description: "Blighted ovum or loss of heart beat in subsequent scan.",
+    },
+    {
+      number: "3",
+      title: "Over 35 years of age",
+      description:
+        "Recurrent miscarriages due to chromosomal abnormality of fetus.",
+    },
+    {
+      number: "4",
+      title: "Failures of implantation with early miscarriages",
+      description: (
+        <>
+          Biochemical pregnancies or early pregnancy losses. Read more on{" "}
+          <Link
+            href="/recurrent-implantation-failure-rif"
+            className="font-medium text-blue underline underline-offset-2 hover:text-blue-dark"
+          >
+            Recurrent Implantation Failures
+          </Link>
+          .
+        </>
+      ),
+    },
+    {
+      number: "5",
+      title:
+        "Previous history of clotting disorder or Autoimmune disease",
+      description:
+        "Systemic lupus erythematosus or previous Deep Vein Thrombosis.",
+    },
+  ];
+
+const checklist: { title?: string; text: ReactNode }[] = [
+  {
+    title: "Karyotyping",
+    text: (
+      <>
+        Both partners are sent for <strong>Karyotyping</strong> to see if there is a
+        Balanced or Robertsonian Translocation.
+      </>
+    ),
+  },
+  {
+    title: "Uterine evaluation",
+    text: (
+      <>
+        <strong>3D Saline Sonogram</strong> or{" "}
+        <Link
+          href="/hysteroscopy-treatment"
+          className="font-medium text-blue underline underline-offset-2 hover:text-rose"
+        >
+          Diagnostic Hysteroscopy
+        </Link>{" "}
+        to identify any Septum, Fibroid, Polyp or Adhesions.
+      </>
+    ),
+  },
+  {
+    title: "Blood work for Clotting",
+    text: (
+      <>
+        Antiphospholipid profile, Lupus Anticoagulant, Anti-cardiolipin
+        Antibody, Anti-Beta2 glycoprotein-1, Protein C &amp; S Deficiency,
+        Factor V Leiden.
+      </>
+    ),
+  },
+  {
+    title: "Profile for Thyroid and Diabetes",
+    text: "TSH, Anti-TPO antibodies, HbA1c, Prolactin and Progesterone levels in luteal phase.",
+  },
+  {
+    title: "Sperm DNA Fragmentation Test",
+    text: (
+      <>
+        Send partner for a{" "}
+        <Link
+          href="/sperm-dna-fragmentation-test"
+          className="font-medium text-blue underline underline-offset-2 hover:text-rose"
+        >
+          Sperm DNA Fragmentation Test
+        </Link>{" "}
+        to evaluate contribution from male.
+      </>
+    ),
+  },
+];
+
+export default function RecurrentMiscarriageIndicationsAndChecklist() {
+  return (
+    <>
+      <TreatmentSection>
+        <div>
+        <TreatmentSectionHeader
+          eyebrow="Know more about this condition"
+          title="Causes of Recurrent Miscarriage : When do you need an evaluation?"
+        />
+
+        <Stagger
+          delay={0.05}
+          className="mt-7 grid auto-rows-fr grid-cols-1 items-stretch gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3"
+        >
+          {indications.map((item) => (
+            <StaggerItem
+              key={item.number}
+              className="h-full min-h-[240px] sm:min-h-[260px]"
+            >
+              <NumberedCard {...item} />
+            </StaggerItem>
+          ))}
+          <StaggerItem className="h-full min-h-[240px] sm:min-h-[260px]">
+            <div className="card-highlight relative h-full min-h-[240px] overflow-hidden rounded-2xl border border-[#fde2ec] bg-white shadow-[0_10px_30px_rgba(232,62,116,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-[#f8b4cb] hover:shadow-[0_18px_40px_rgba(232,62,116,0.12)] sm:min-h-[260px]">
+              <Image
+                src="/shared-gallery/rpl miscarriage.jpeg"
+                alt="Recurrent Pregnancy Loss and Miscarriage Care"
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="object-cover object-center"
+              />
+            </div>
+          </StaggerItem>
+        </Stagger>
+      </div>
+      </TreatmentSection>
+
+      <TreatmentSection>
+        <div>
+        <TreatmentSectionHeader
+          eyebrow="Evaluation"
+          title="Tests we perform : 5 Pillar Investigation for Recurrent Miscarriage"
+          subtitle="We Investigate under 5 heads to rule out all correctable causes of miscarriage."
+        />
+
+        <div className="mt-6 flex flex-col gap-3.5 sm:mt-7 sm:gap-4">
+          {checklist.map((item, idx) => (
+            <Reveal key={idx} variant="fadeUp" delay={idx * 0.04}>
+              <ChecklistRow title={item.title} text={item.text} />
+            </Reveal>
+          ))}
+        </div>
+      </div>
+      </TreatmentSection>
+    </>
+  );
+}

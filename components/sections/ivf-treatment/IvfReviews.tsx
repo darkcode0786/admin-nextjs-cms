@@ -1,0 +1,67 @@
+"use client";
+
+import Link from "next/link";
+
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/Reveal";
+import {
+  TreatmentSection,
+  TreatmentSectionHeader,
+  ReviewCard,
+} from "@/components/ui/treatment";
+
+const reviews = [
+  {
+    title: "Warm, Friendly & Caring",
+    review:
+      "We had the pleasure of getting IVF treatment in Delhi with Dr. Mona. She is a warm, friendly, and caring fertility doctor who truly goes above and beyond to ensure her patients receive the best possible care. Her entire staff is professional, helpful, and courteous, making the entire experience seamless and stress-free. I'd like to extend a special mention to the embryologist at her fertility clinic in Delhi, who was exceptional in sharing the Embryo development details.",
+    initial: "A",
+    name: "Abhishek Mishra",
+    source: "Patient review",
+  },
+  {
+    review:
+      "We got success with Dr Mona after 1 IVF Failure at Indira IVF. Dr. Mona has very high knowledge about fertility procedures. She did an advanced embryo grading along with an ERA test that pinpointed the issue for us. One cycle with her and we are finally pregnant. Yes, she is just amazing in her approach and results.",
+    initial: "L",
+    name: "Lucky Singh",
+    source: "Google patient review",
+  },
+  {
+    title: "We had the most Supportive Fertility Journey with Dr. Mona.",
+    review:
+      "Having now known her I can proudly say that beyond her medical excellence her emotional support kept us going. Her gentle embryo transfer technique resulted in a smooth pregnancy for us. We will be forever thankful to her and her wonderful team.",
+    initial: "V",
+    name: "Vinit Kumar",
+    source: "Google patient review",
+  },
+];
+
+export default function IvfReviews() {
+  return (
+    <TreatmentSection>
+      <TreatmentSectionHeader
+        eyebrow="Feedback of IVF"
+        title="What our Patients say about IVF"
+      />
+
+      <Stagger
+        delay={0.05}
+        className="mt-7 grid grid-cols-1 gap-5 lg:grid-cols-3"
+      >
+        {reviews.map((rev) => (
+          <StaggerItem key={rev.name}>
+            <ReviewCard {...rev} />
+          </StaggerItem>
+        ))}
+      </Stagger>
+
+      <Reveal variant="fadeUp" delay={0.1} className="mt-8">
+        <Link
+          href="/best-ivf-patient-reviews"
+          className="inline-flex items-center justify-center rounded-full border border-blue/35 bg-blue/10 px-5 py-2.5 text-[13px] font-semibold text-blue shadow-sm transition-all hover:border-blue hover:bg-blue hover:text-white sm:text-[13.5px]"
+        >
+          View More
+        </Link>
+      </Reveal>
+    </TreatmentSection>
+  );
+}

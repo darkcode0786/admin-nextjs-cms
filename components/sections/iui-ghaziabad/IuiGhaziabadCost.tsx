@@ -1,0 +1,103 @@
+"use client";
+
+import { FaPills, FaHeartbeat, FaFlask, FaHeart } from "react-icons/fa";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/Reveal";
+
+export default function IuiGhaziabadCost() {
+  const costFactors = [
+    {
+      icon: <FaPills className="size-4" />,
+      title: "Medication",
+      desc: "If we only use oral drugs then the cost will be less. If we need to add injectable gonadotropins the cost will increase.",
+    },
+    {
+      icon: <FaHeartbeat className="size-4" />,
+      title: "Monitoring",
+      desc: "How many scans you will require to monitor your follicles and trigger ovulation.",
+    },
+    {
+      icon: <FaFlask className="size-4" />,
+      title: "Sperm Washing",
+      desc: "This involves using special media to separate the best quality sperms.",
+    },
+    {
+      icon: <FaHeart className="size-4" />,
+      title: "Sperms Used",
+      desc: "Are you using your partner's sperm or donor's sperm?",
+    },
+  ];
+
+  return (
+    <section id="iui-cost" className="relative overflow-hidden bg-white py-8 sm:py-10 lg:py-14 border-t border-slate-100">
+      <div className="page-container relative">
+        <Reveal variant="fadeUp">
+          <span className="text-[12px] font-semibold tracking-wider text-rose uppercase sm:text-[13px]">
+            Cost of IUI
+          </span>
+
+          <h2 className="font-serif mt-2 text-[1.85rem] leading-[1.2] font-bold tracking-tight text-ink sm:text-[2.2rem] lg:text-[2.45rem]">
+            What is the cost of IUI in Ghaziabad?
+          </h2>
+
+          <p className="mt-2.5 max-w-3xl text-[13.5px] leading-relaxed text-slate-600 sm:text-[14.5px]">
+            IUI is cheaper than IVF but can still be expensive.
+          </p>
+        </Reveal>
+
+        {/* Highlight Price Banner */}
+        <Reveal variant="fadeUp" delay={0.1} className="mt-7">
+          <div className="card-highlight relative overflow-hidden rounded-2xl border border-[#fde2ec] bg-gradient-to-br from-[#fff7fa] to-[#fff0f5] p-6 shadow-sm sm:p-8">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute top-0 right-0 h-64 w-64 -translate-y-1/2 translate-x-1/2 rounded-full opacity-20 blur-3xl"
+              style={{ background: "radial-gradient(circle, var(--blue) 0%, transparent 70%)" }}
+            />
+            <div className="relative grid grid-cols-1 items-center gap-6 md:grid-cols-12 md:gap-8">
+              <div className="md:col-span-4 lg:col-span-3">
+                <p className="font-serif text-[2.4rem] font-bold tracking-tight text-rose sm:text-[2.8rem] lg:text-[3.1rem]">
+                  ₹15,000
+                </p>
+              </div>
+
+              <div className="md:col-span-8 lg:col-span-9 md:border-l md:border-[#fde2ec] md:pl-8">
+                <h3 className="text-[15px] font-bold text-ink sm:text-[16px]">
+                  Starting price per IUI Cycle at Dr Mona Dahiya&apos;s Ghaziabad Center
+                </h3>
+                <p className="mt-2 text-[13px] leading-relaxed text-slate-600 sm:text-[13.5px]">
+                  There are multiple factors that determine how much your IUI will cost you. Here are a few.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        {/* Cost Factors Grid */}
+        <div className="mt-10">
+          <h3 className="font-serif text-[1.15rem] font-bold text-ink sm:text-[1.25rem]">
+            Factors that can affect the price of IUI
+          </h3>
+
+          <Stagger className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5" stagger={0.06}>
+            {costFactors.map((item, idx) => (
+              <StaggerItem key={idx} className="h-full">
+                <div className="card-highlight flex h-full flex-col rounded-2xl border border-[#fde2ec] bg-white p-5 shadow-sm transition-all duration-300 hover:border-[#fbcfe0] hover:bg-[#fff0f5] hover:shadow-md sm:p-6">
+                  <div className="flex items-center gap-3">
+                    <span className="card-badge flex size-9 shrink-0 items-center justify-center rounded-xl bg-rose text-white">
+                      {item.icon}
+                    </span>
+                    <h4 className="text-[14px] font-bold leading-snug text-ink sm:text-[14.5px]">
+                      {item.title}
+                    </h4>
+                  </div>
+                  <p className="mt-3 text-[13px] leading-relaxed text-slate-600 sm:text-[13.5px]">
+                    {item.desc}
+                  </p>
+                </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+      </div>
+    </section>
+  );
+}

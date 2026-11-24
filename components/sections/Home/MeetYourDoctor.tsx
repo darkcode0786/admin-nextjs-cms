@@ -1,0 +1,223 @@
+"use client";
+
+import {
+  FaCheck,
+  FaArrowRight,
+  FaYoutube,
+  FaGraduationCap,
+  FaUserMd,
+  FaHospital,
+  FaCertificate,
+  FaMedal,
+} from "react-icons/fa";
+import siteData from "@/data/site.json";
+import { Reveal } from "@/components/ui/Reveal";
+
+const qualIconMap = {
+  pink: {
+    Icon: FaGraduationCap,
+    bg: "bg-[#fde8ef]",
+    text: "text-[#e11d60]",
+  },
+  purple: {
+    Icon: FaUserMd,
+    bg: "bg-[#efe8ff]",
+    text: "text-[#7b5bb8]",
+  },
+  green: {
+    Icon: FaHospital,
+    bg: "bg-[#e4f0ff]",
+    text: "text-blue",
+  },
+  orange: {
+    Icon: FaCertificate,
+    bg: "bg-[#fff0e4]",
+    text: "text-[#e8893a]",
+  },
+  blue: {
+    Icon: FaMedal,
+    bg: "bg-[#e8f2ff]",
+    text: "text-[#4a90d9]",
+  },
+} as const;
+
+type QualColor = keyof typeof qualIconMap;
+
+export default function MeetYourDoctor() {
+  const data = siteData.meetYourDoctor;
+  const { card } = data;
+
+  return (
+    <section
+      id="about"
+      className="relative overflow-hidden py-6 sm:py-7 lg:py-8"
+      style={{
+        background:
+          "linear-gradient(165deg, #ffffff 0%, #fff8fb 28%, #fff5f9 55%, #ffffff 100%)",
+      }}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 left-[-8%] h-[420px] w-[420px] rounded-full opacity-70 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,210,228,0.55) 0%, rgba(255,232,240,0.2) 45%, transparent 70%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-[20%] right-[-6%] h-[380px] w-[380px] rounded-full opacity-60 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(253,196,216,0.45) 0%, rgba(255,240,246,0.15) 50%, transparent 72%)",
+        }}
+      />
+
+      <div className="page-container relative">
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-10 xl:gap-14">
+          <Reveal variant="slideLeft" className="relative z-10 w-full min-w-0">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#f9c5d4]/60 bg-gradient-to-r from-[#ffe8f0] to-[#fff5f8] px-3.5 py-1.5 text-[12px] font-semibold whitespace-nowrap text-rose shadow-[0_4px_14px_rgba(232,62,116,0.08)]">
+              <span className="size-1.5 rounded-full bg-gradient-to-br from-[#f4729a] to-[var(--rose)]" />
+              {data.badge}
+            </span>
+
+            <h2 className="font-display mt-5 text-[1.85rem] leading-[1.18] font-bold tracking-[-0.02em] text-[#0f2038] sm:text-[2.35rem] lg:text-[2.35rem] xl:text-[2.75rem]">
+              <span className="sm:whitespace-nowrap">{data.titleLine1}</span>
+              <br />
+              <span className="sm:whitespace-nowrap">{data.titleLine2}</span>
+              <br />
+              <span className="bg-gradient-to-r from-rose via-[#f0518e] to-[var(--rose)] bg-clip-text text-transparent sm:whitespace-nowrap">
+                {data.titleAccent}
+              </span>
+            </h2>
+
+            <p className="mt-4 max-w-[520px] text-[13.5px] leading-relaxed text-[#64748b] sm:text-[14.5px]">
+              {data.description}
+            </p>
+
+            <ul className="mt-6 grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2 xl:mt-7 xl:gap-x-6 xl:gap-y-3.5">
+              {data.features.map((feature) => (
+                <li key={feature} className="flex items-start gap-2">
+                  <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-rose to-rose-dark text-white shadow-[0_4px_12px_rgba(232,62,116,0.3)]">
+                    <FaCheck className="size-2.5" />
+                  </span>
+                  <span className="text-[12.5px] leading-snug font-semibold text-navy xl:text-[13.5px]">
+                    {feature}
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-7 hidden flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center lg:flex xl:mt-8 xl:gap-3">
+              <a
+                href={data.primaryCta.href}
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-rose via-[#f0518e] to-[#d13266] px-3.5 py-2.5 text-[11.5px] font-semibold text-white whitespace-nowrap shadow-[0_10px_28px_rgba(232,62,116,0.32)] transition hover:brightness-105 xl:gap-2.5 xl:px-5 xl:py-3 xl:text-[13.5px]"
+              >
+                <span>{data.primaryCta.label}</span>
+                <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-white text-rose xl:size-6">
+                  <FaArrowRight className="size-2.5" />
+                </span>
+              </a>
+
+              <a
+                href={data.secondaryCta.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-[#f5a3bd] bg-gradient-to-r from-white to-[#fff5f8] px-3.5 py-2 text-[11.5px] font-semibold text-ink whitespace-nowrap shadow-[0_6px_18px_rgba(232,62,116,0.08)] transition hover:from-[#fff5f8] hover:to-[#ffe8f0] xl:gap-2.5 xl:px-5 xl:py-2.5 xl:text-[13.5px]"
+              >
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#ff0033] text-white shadow-[0_3px_10px_rgba(255,0,51,0.3)] xl:size-8">
+                  <FaYoutube className="size-4 xl:size-[18px]" />
+                </span>
+                <span>{data.secondaryCta.label}</span>
+              </a>
+            </div>
+          </Reveal>
+
+          <Reveal
+            variant="slideRight"
+            className="relative z-10 w-full min-w-0"
+          >
+            <article
+              className="mx-auto w-full max-w-[520px] rounded-[28px] border border-[#f7c9d8]/80 p-5 shadow-[0_20px_48px_rgba(232,62,116,0.12)] sm:p-7 lg:ml-auto lg:p-6 xl:p-8"
+              style={{
+                background:
+                  "linear-gradient(160deg, #fff8fb 0%, #fff0f5 42%, #ffe8f0 100%)",
+              }}
+            >
+              <p className="text-[12.5px] font-bold tracking-wide text-[#e11d60] sm:text-[13.5px]">
+                {card.eyebrow}
+              </p>
+              <h3 className="font-display mt-2 text-[1.85rem] leading-none font-normal sm:text-[2.25rem] xl:text-[2.45rem]">
+                <span className="text-ink">{card.namePrefix}</span>{" "}
+                <span className="bg-gradient-to-r from-[#e11d60] to-[#f0518e] bg-clip-text text-transparent">
+                  {card.name}
+                </span>
+              </h3>
+
+              <div className="mt-6 mb-1 flex items-center gap-3">
+                <span className="shrink-0 text-[11px] font-bold tracking-[0.14em] text-[#e11d60] uppercase sm:text-[12px]">
+                  {card.sectionLabel}
+                </span>
+                <span className="h-px flex-1 bg-gradient-to-r from-[#f0a8bc] to-transparent" />
+              </div>
+
+              <ul className="flex flex-col">
+                {card.qualifications.map((item, index) => {
+                  const theme = qualIconMap[item.color as QualColor];
+                  const Icon = theme.Icon;
+                  const isLast = index === card.qualifications.length - 1;
+                  return (
+                    <li
+                      key={item.title}
+                      className={`flex items-start gap-4 py-3.5 sm:py-4 ${
+                        isLast ? "" : "border-b border-[#f3d0dc]/80"
+                      }`}
+                    >
+                      <span
+                        className={`mt-0.5 flex size-11 shrink-0 items-center justify-center rounded-full sm:size-12 ${theme.bg} ${theme.text}`}
+                      >
+                        <Icon className="size-5 sm:size-[22px]" />
+                      </span>
+                      <div className="min-w-0 pt-0.5">
+                        <p className="text-[15px] leading-snug font-bold text-ink sm:text-[16px]">
+                          {item.title}
+                        </p>
+                        <p className="mt-1 text-[12.5px] leading-snug text-[#667d99] sm:text-[13.5px]">
+                          {item.subtitle}
+                        </p>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </article>
+
+            <div className="mx-auto mt-5 flex w-full max-w-[520px] flex-col gap-3 lg:hidden">
+              <a
+                href={data.primaryCta.href}
+                className="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-rose via-[#f0518e] to-[#d13266] px-5 py-3.5 text-[14px] font-semibold text-white shadow-[0_10px_28px_rgba(232,62,116,0.32)] transition hover:brightness-105"
+              >
+                <span>{data.primaryCta.label}</span>
+                <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-white text-rose">
+                  <FaArrowRight className="size-2.5" />
+                </span>
+              </a>
+
+              <a
+                href={data.secondaryCta.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-[#f5a3bd] bg-white px-5 py-3 text-[14px] font-semibold text-ink shadow-[0_6px_18px_rgba(232,62,116,0.08)] transition hover:bg-[#fff5f8]"
+              >
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#ff0033] text-white shadow-[0_3px_10px_rgba(255,0,51,0.3)]">
+                  <FaYoutube className="size-[18px]" />
+                </span>
+                <span>{data.secondaryCta.label}</span>
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}

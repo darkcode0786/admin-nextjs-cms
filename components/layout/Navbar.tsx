@@ -1,0 +1,637 @@
+"use client";
+
+import { useState, useEffect, type MouseEvent } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import siteData from "@/data/site.json";
+import {
+  CalendarIcon,
+  ChevronDownIcon,
+  CloseIcon,
+  MenuIcon,
+  PhoneIcon,
+} from "@/components/ui/Icons";
+import { FaStar, FaWhatsapp } from "react-icons/fa";
+
+function normalizePath(path: string) {
+  const clean = path.split("#")[0]?.split("?")[0] ?? "";
+  if (clean.length > 1 && clean.endsWith("/")) return clean.slice(0, -1);
+  return clean;
+}
+
+function isHrefActive(pathname: string, href?: string) {
+  if (!href || href === "#" || href.startsWith("#")) return false;
+  const target = normalizePath(href);
+  if (!target || target === "/404") return false;
+  if (target === "/") return pathname === "/";
+  return pathname === target || pathname.startsWith(`${target}/`);
+}
+
+type NavMenuItem = (typeof siteData.navbar.menu)[number];
+
+const EXTRA_ROUTES_BY_TAB: Record<string, string[]> = {
+  Treatments: [
+    "/best-iui-doctor-in-delhi",
+    "/best-iui-doctor-in-ghaziabad",
+    "/best-ivf-doctor-in-noida",
+    "/best-ivf-doctor-in-delhi",
+    "/best-ivf-doctor-in-ghaziabad",
+    "/ivf-cost-emi",
+  ],
+  "Conditions Treated": [
+    "/best-female-infertility-doctor-in-noida",
+    "/best-male-infertility-doctor-in-noida",
+  ],
+  "About Dr. Mona": [
+    "/privacy-policy",
+    "/terms-of-service",
+    "/medical-disclaimer",
+    "/refund-and-cancellation-policy",
+  ],
+  "Patient Resources": [
+    "/fertility-assessment-quiz",
+    "/international-ivf-patient",
+    "/comprehensive-ivf-faqs",
+    "/contact-us",
+  ],
+};
+
+function isNavItemActive(pathname: string, item: NavMenuItem) {
+  if (isHrefActive(pathname, item.href)) return true;
+  if (EXTRA_ROUTES_BY_TAB[item.label]?.some((href) => isHrefActive(pathname, href))) {
+    return true;
+  }
+  if ("dropdown" in item && Array.isArray(item.dropdown)) {
+    if (item.dropdown.some((sub) => isHrefActive(pathname, sub.href))) {
+      return true;
+    }
+  }
+  if ("megaMenu" in item && Array.isArray(item.megaMenu)) {
+    if (
+      item.megaMenu.some((col) =>
+        col.items.some((sub) => isHrefActive(pathname, sub.href)),
+      )
+    ) {
+      return true;
+    }
+  }
+  if ("treatmentsMega" in item && item.treatmentsMega) {
+    const inColumns = item.treatmentsMega.columns.some((col) =>
+      col.items.some((sub) => isHrefActive(pathname, sub.href)),
+    );
+    if (inColumns) return true;
+    if (isHrefActive(pathname, item.treatmentsMega.promoCard?.ctaHref)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function handlePlainNavClick(
+  e: MouseEvent<HTMLAnchorElement>,
+  href: string,
+) {
+  if (typeof window === "undefined") return;
+  if (href === "#") {
+    e.preventDefault();
+    return;
+  }
+  if (href.includes("#")) return;
+
+  const path = href.split("?")[0] || "/";
+  if (window.location.pathname !== path) return;
+
+  // Same page (e.g. /about-mona-dahiya#credentials → About): clear hash & go to top
+  e.preventDefault();
+  if (window.location.hash) {
+    history.replaceState(null, "", path);
+  }
+  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+}
+
+export default function Navbar() {
+  const { brand, menu, cta } = siteData.navbar;
+  const rawPathname = usePathname() || "/";
+  const pathname = normalizePath(rawPathname);
+  const [open, setOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+  const closeMobileMenu = () => {
+    setOpen(false);
+    setOpenDropdown(null);
+  };
+
+  useEffect(() => {
+    // Lock scroll on <html> rather than <body> because overflow:hidden on <body>
+    // breaks position:sticky on .site-header when scrolled down the page.
+    if (!open) {
+      document.documentElement.style.overflow = "";
+      return;
+    }
+    document.documentElement.style.overflow = "hidden";
+
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setOpen(false);
+        setOpenDropdown(null);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      document.documentElement.style.overflow = "";
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [open]);
+
+  return (
+    <header className="relative z-40 bg-transparent">
+      {/* Brand row — matched to footer navy palette */}
+      <div
+        className="relative overflow-hidden border-b border-white/10"
+        style={{
+          background:
+            "linear-gradient(90deg, var(--navy) 0%, var(--navy-mid) 50%, var(--navy) 100%)",
+        }}
+      >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 right-0 w-[40%] opacity-25"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 100% at 90% 50%, rgba(140,200,255,0.35) 0%, transparent 65%)",
+          }}
+        />
+        <div className="relative z-10 page-container flex items-center gap-3 py-1.5 sm:py-1.5 xl:py-2">
+          <Link href={brand.href} className="min-w-0 shrink-0 text-left">
+            <span className="font-display block text-left text-[1.35rem] leading-none font-bold tracking-tight whitespace-nowrap text-white sm:text-[1.5rem] lg:text-[1.55rem] xl:text-[1.85rem]">
+              {brand.name}
+            </span>
+            <span className="mt-0.5 block text-left text-[9.5px] font-medium tracking-wide whitespace-nowrap text-white/85 xl:text-[10.5px]">
+              {brand.tagline}
+            </span>
+          </Link>
+
+          <div className="ml-auto hidden shrink-0 items-center gap-3.5 md:flex lg:gap-4 xl:gap-5">
+            <a
+              href="tel:+919267982924"
+              className="flex shrink-0 items-center gap-2 text-[12.5px] font-semibold whitespace-nowrap text-white transition-opacity hover:opacity-90 xl:text-[14px]"
+            >
+              <PhoneIcon className="size-3.5 shrink-0 rotate-[-10deg] text-white/90 xl:size-3.5" />
+              <span className="tracking-wide tabular-nums">+91 92679 82924</span>
+            </a>
+
+            <a
+              href="https://wa.me/919267982924"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Chat on WhatsApp"
+              className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#25d366] text-white shadow-[0_0_16px_rgba(37,211,102,0.55)] transition-transform hover:scale-105 active:scale-95 xl:size-8"
+            >
+              <FaWhatsapp className="size-4 xl:size-4.5" />
+            </a>
+
+            <div
+              className="flex shrink-0 items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-2.5 py-0.5 whitespace-nowrap shadow-sm backdrop-blur-sm xl:px-3 xl:py-1"
+            >
+              <div className="flex items-center gap-0.5 text-[#f5a524]">
+                <FaStar className="size-2.5 fill-current xl:size-3" />
+                <FaStar className="size-2.5 fill-current xl:size-3" />
+                <FaStar className="size-2.5 fill-current xl:size-3" />
+                <FaStar className="size-2.5 fill-current xl:size-3" />
+                <FaStar className="size-2.5 fill-current xl:size-3" />
+              </div>
+              <span className="text-[11.5px] font-bold text-white xl:text-[12.5px]">4.9</span>
+              <span className="text-[10.5px] font-medium text-white/85 xl:text-[11px]">
+                Google patient reviews
+              </span>
+            </div>
+          </div>
+
+          <div className="ml-auto flex items-center gap-2 lg:hidden">
+            <a
+              href="https://wa.me/919267982924"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Chat on WhatsApp"
+              className="flex size-8 items-center justify-center rounded-full bg-[#25d366] text-white shadow-sm md:hidden"
+            >
+              <FaWhatsapp className="size-4" />
+            </a>
+            <button
+              type="button"
+              className="inline-flex size-9 items-center justify-center rounded-lg border border-white/20 text-white"
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              aria-label={open ? "Close menu" : "Open menu"}
+              onClick={() => {
+                setOpen((v) => {
+                  if (v) setOpenDropdown(null);
+                  return !v;
+                });
+              }}
+            >
+              {open ? <CloseIcon className="size-5" /> : <MenuIcon className="size-5" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Menu row — Deep Royal Navy bar with subtle border & rose hover accent (desktop only) */}
+      <div
+        className="relative z-10 hidden lg:block"
+        style={{
+          background:
+            "linear-gradient(90deg, var(--navy) 0%, var(--navy-mid) 50%, var(--navy) 100%)",
+        }}
+      >
+        <div className="page-container flex items-center gap-2 py-0.5 lg:gap-3 xl:py-1">
+          <nav
+            className="hidden items-center justify-start gap-0.5 lg:flex xl:gap-1.5"
+            aria-label="Primary"
+          >
+            {menu.map((item) => {
+              const hasDropdown = "dropdown" in item && Array.isArray(item.dropdown) && item.dropdown.length > 0;
+              const isMegaMenu = "isMegaMenu" in item && Boolean(item.isMegaMenu) && "megaMenu" in item && Array.isArray(item.megaMenu);
+              const isTreatmentsMega = "isTreatmentsMega" in item && Boolean(item.isTreatmentsMega) && "treatmentsMega" in item;
+              const isActive = isNavItemActive(pathname, item);
+              const isDirectActive = isHrefActive(pathname, item.href);
+
+              return (
+                <div key={item.label} className="group/nav relative py-0.5">
+                  <a
+                    href={item.href}
+                    aria-current={isDirectActive ? "page" : undefined}
+                    onClick={(e) => handlePlainNavClick(e, item.href)}
+                    className={`group relative inline-flex shrink-0 items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-semibold tracking-[0.05em] uppercase whitespace-nowrap transition-all xl:px-3 xl:py-1.5 xl:text-[12.5px] xl:tracking-[0.06em] ${
+                      isActive
+                        ? "bg-white/15 text-rose ring-1 ring-rose/45 shadow-[inset_0_-2px_0_0_var(--rose)]"
+                        : "text-white/95 hover:bg-white/10 hover:text-rose group-hover/nav:bg-white/10 group-hover/nav:text-rose"
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {item.hasDropdown ? (
+                      <ChevronDownIcon
+                        className={`size-3 shrink-0 transition-transform duration-200 group-hover/nav:rotate-180 group-hover/nav:text-rose group-hover/nav:opacity-100 xl:size-3.5 ${
+                          isActive ? "text-rose opacity-100" : "opacity-70"
+                        }`}
+                      />
+                    ) : null}
+                  </a>
+
+                  {/* Treatments Mega Menu Dropdown (3 Columns + Promo Card + Bottom Assessment Banner) */}
+                  {isTreatmentsMega ? (
+                    <div className="invisible absolute top-full left-0 z-50 pt-1 opacity-0 pointer-events-none translate-y-2 transition-all duration-250 ease-out group-hover/nav:visible group-hover/nav:pointer-events-auto group-hover/nav:translate-y-0 group-hover/nav:opacity-100">
+                      <div className="w-[1180px] max-w-[92vw] overflow-hidden rounded-b-2xl border-t-2 border-rose bg-navy shadow-[0_25px_50px_rgba(0,10,30,0.8)] ring-1 ring-white/10">
+                        {/* Top Columns + Promo Card Grid */}
+                        <div className="grid grid-cols-12 gap-8 px-8 pt-7 pb-6">
+                          {/* 3 Categories Columns */}
+                          <div className="col-span-9 grid grid-cols-3 gap-8">
+                            {item.treatmentsMega!.columns.map((col) => (
+                              <div key={col.category} className="flex flex-col">
+                                <span className="mb-4 text-[11px] font-bold tracking-[0.12em] text-rose uppercase">
+                                  {col.category}
+                                </span>
+                                <div className="flex flex-col space-y-3">
+                                  {col.items.map((sub) => {
+                                    const subActive = isHrefActive(pathname, sub.href);
+                                    return (
+                                      <a
+                                        key={sub.label}
+                                        href={sub.href}
+                                        aria-current={subActive ? "page" : undefined}
+                                        className={`text-[13.5px] leading-snug normal-case transition-colors duration-150 ${
+                                          subActive
+                                            ? "font-semibold text-rose underline underline-offset-4"
+                                            : "highlight" in sub && sub.highlight
+                                              ? "font-semibold text-rose hover:underline"
+                                              : "font-normal text-white/90 hover:text-rose"
+                                        }`}
+                                      >
+                                        {sub.label}
+                                      </a>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Right Promo Card */}
+                          <div className="col-span-3 flex flex-col justify-between rounded-2xl border border-white/10 bg-navy-mid/80 p-6 shadow-md backdrop-blur-sm">
+                            <div>
+                              <h4 className="font-serif text-[19px] leading-[1.3] font-normal text-white">
+                                {item.treatmentsMega!.promoCard.title}
+                              </h4>
+                              <p className="mt-3 text-[13px] leading-relaxed text-white/75">
+                                {item.treatmentsMega!.promoCard.subtitle}
+                              </p>
+                            </div>
+
+                            <div className="mt-6">
+                              <a
+                                href={item.treatmentsMega!.promoCard.ctaHref}
+                                aria-current={
+                                  isHrefActive(pathname, item.treatmentsMega!.promoCard.ctaHref)
+                                    ? "page"
+                                    : undefined
+                                }
+                                className={`inline-flex w-full items-center justify-center rounded-full px-5 py-2.5 text-[12.5px] font-bold shadow-sm transition-all active:scale-95 ${
+                                  isHrefActive(pathname, item.treatmentsMega!.promoCard.ctaHref)
+                                    ? "bg-rose text-white hover:bg-rose-dark"
+                                    : "bg-white text-ink hover:bg-slate-100 hover:text-blue"
+                                }`}
+                              >
+                                {item.treatmentsMega!.promoCard.ctaLabel}
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Bottom Banner Bar */}
+                        <div className="mx-8 mb-6 overflow-hidden rounded-xl bg-navy/90 px-6 py-3.5 border border-white/10">
+                          <div className="flex items-center gap-2 text-[13px] text-white/85">
+                            <span className="font-bold text-white">
+                              {item.treatmentsMega!.bottomBanner.title}
+                            </span>
+                            <a
+                              href={item.treatmentsMega!.bottomBanner.linkHref}
+                              className="font-medium text-white/90 transition-colors hover:text-rose"
+                            >
+                              {item.treatmentsMega!.bottomBanner.linkText}
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {/* Mega Menu Dropdown (2-Column Layout matching Screenshot) */}
+                  {isMegaMenu ? (
+                    <div className="invisible absolute top-full left-0 z-50 pt-1 opacity-0 pointer-events-none translate-y-2 transition-all duration-250 ease-out group-hover/nav:visible group-hover/nav:pointer-events-auto group-hover/nav:translate-y-0 group-hover/nav:opacity-100">
+                      <div className="w-[660px] overflow-hidden rounded-b-2xl border-t-2 border-rose bg-navy p-5 shadow-[0_22px_45px_rgba(0,10,30,0.7)] ring-1 ring-white/10">
+                        <div className="grid grid-cols-2 gap-7">
+                          {item.megaMenu!.map((col) => (
+                            <div key={col.category} className="flex flex-col">
+                              <span className="mb-3 text-[11px] font-bold tracking-[0.12em] text-rose uppercase">
+                                {col.category}
+                              </span>
+                              <div className="flex flex-col space-y-1">
+                                {col.items.map((sub) => {
+                                  const subActive = isHrefActive(pathname, sub.href);
+                                  return (
+                                    <a
+                                      key={sub.label}
+                                      href={sub.href}
+                                      aria-current={subActive ? "page" : undefined}
+                                      className={`rounded-lg px-2.5 py-1.5 text-[13.5px] normal-case transition-all duration-150 ${
+                                        subActive
+                                          ? "bg-white/10 font-semibold text-rose"
+                                          : "font-medium text-slate-100 hover:bg-white/10 hover:text-rose"
+                                      }`}
+                                    >
+                                      {sub.label}
+                                    </a>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {/* Standard Single Column Dropdown */}
+                  {!isMegaMenu && hasDropdown ? (
+                    <div className="invisible absolute top-full left-0 z-50 pt-1 opacity-0 pointer-events-none translate-y-2 transition-all duration-250 ease-out group-hover/nav:visible group-hover/nav:pointer-events-auto group-hover/nav:translate-y-0 group-hover/nav:opacity-100">
+                      <div className="w-[290px] overflow-hidden rounded-b-2xl border-t-2 border-rose bg-navy p-2 shadow-[0_22px_45px_rgba(0,10,30,0.7)] ring-1 ring-white/10">
+                        {item.dropdown!.map((sub) => {
+                          const subActive = isHrefActive(pathname, sub.href);
+                          return (
+                            <a
+                              key={sub.label}
+                              href={sub.href}
+                              aria-current={subActive ? "page" : undefined}
+                              className={`flex items-center justify-between rounded-xl px-4 py-2.5 text-[14px] normal-case transition-all duration-200 ${
+                                subActive
+                                  ? "bg-white/10 font-semibold text-rose"
+                                  : "font-medium text-slate-100 hover:bg-white/10 hover:text-rose"
+                              }`}
+                            >
+                              <span>{sub.label}</span>
+                              {"badge" in sub && typeof sub.badge === "string" ? (
+                                <span className="ml-2 inline-flex items-center rounded-full bg-[#f59e0b] px-2 py-0.5 text-[10px] font-extrabold tracking-wide text-black uppercase shadow-sm">
+                                  {sub.badge}
+                                </span>
+                              ) : null}
+                            </a>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
+          </nav>
+
+          <div className="ml-auto hidden shrink-0 lg:block">
+            <a
+              href={cta.href}
+              className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-rose px-3.5 py-1.5 text-[11px] font-bold tracking-[0.07em] text-white uppercase whitespace-nowrap shadow-[0_4px_14px_rgba(232,62,116,0.4)] transition-all hover:bg-rose-dark xl:px-5 xl:py-2 xl:text-[12.5px] xl:tracking-[0.07em]"
+            >
+              <CalendarIcon className="size-3.5 shrink-0 xl:size-4" />
+              {cta.label}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Drawer */}
+      {open ? (
+        <div
+          id="mobile-menu"
+          className="absolute inset-x-0 top-full z-[70] max-h-[calc(100dvh-var(--site-header-h,5.25rem))] overflow-y-auto overscroll-contain border-t border-white/10 bg-[rgba(6,21,50,0.98)] px-4 pt-4 pb-8 shadow-2xl backdrop-blur-md [-webkit-overflow-scrolling:touch] lg:hidden"
+        >
+          <nav className="flex flex-col gap-1" aria-label="Mobile">
+            {menu.map((item) => {
+              const hasDropdown =
+                "dropdown" in item &&
+                Array.isArray(item.dropdown) &&
+                item.dropdown.length > 0;
+              const isMegaMenu =
+                "isMegaMenu" in item &&
+                Boolean(item.isMegaMenu) &&
+                "megaMenu" in item &&
+                Array.isArray(item.megaMenu);
+              const isTreatmentsMega =
+                "isTreatmentsMega" in item &&
+                Boolean(item.isTreatmentsMega) &&
+                "treatmentsMega" in item;
+              const hasAnyChildren = hasDropdown || isMegaMenu || isTreatmentsMega;
+              const isExpanded = openDropdown === item.label;
+              const isActive = isNavItemActive(pathname, item);
+              const isDirectActive = isHrefActive(pathname, item.href);
+
+              return (
+                <div key={item.label} className="flex flex-col">
+                  {hasAnyChildren ? (
+                    <button
+                      type="button"
+                      className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-semibold tracking-wide uppercase transition-colors ${
+                        isActive
+                          ? "bg-white/10 text-rose"
+                          : "text-white hover:bg-white/5"
+                      }`}
+                      aria-expanded={isExpanded}
+                      onClick={() =>
+                        setOpenDropdown((prev) =>
+                          prev === item.label ? null : item.label,
+                        )
+                      }
+                    >
+                      <span>{item.label}</span>
+                      <ChevronDownIcon
+                        className={`size-4 transition-transform duration-300 ease-in-out ${
+                          isExpanded ? "rotate-180" : ""
+                        } ${isActive ? "text-rose opacity-100" : "opacity-70"}`}
+                      />
+                    </button>
+                  ) : (
+                    <a
+                      href={item.href}
+                      aria-current={isDirectActive ? "page" : undefined}
+                      className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-semibold tracking-wide uppercase transition-colors ${
+                        isActive
+                          ? "bg-white/10 text-rose"
+                          : "text-white hover:bg-white/5"
+                      }`}
+                      onClick={(e) => {
+                        handlePlainNavClick(e, item.href);
+                        closeMobileMenu();
+                      }}
+                    >
+                      <span>{item.label}</span>
+                    </a>
+                  )}
+
+                  {isTreatmentsMega && isExpanded ? (
+                    <div className="ml-4 mb-2 flex flex-col gap-3 border-l-2 border-rose/60 pl-3 pt-1">
+                      {item.treatmentsMega!.columns.map((col) => (
+                        <div key={col.category} className="flex flex-col gap-1">
+                          <span className="text-[10.5px] font-bold tracking-wider text-rose uppercase">
+                            {col.category}
+                          </span>
+                          {col.items.map((sub) => {
+                            const subActive = isHrefActive(pathname, sub.href);
+                            return (
+                              <a
+                                key={sub.label}
+                                href={sub.href}
+                                aria-current={subActive ? "page" : undefined}
+                                className={`rounded-md px-2 py-1 text-[13px] normal-case ${
+                                  subActive
+                                    ? "bg-white/10 font-semibold text-rose"
+                                    : "highlight" in sub && sub.highlight
+                                      ? "font-bold text-rose"
+                                      : "font-normal text-white/80 hover:text-rose"
+                                }`}
+                                onClick={closeMobileMenu}
+                              >
+                                {sub.label}
+                              </a>
+                            );
+                          })}
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+
+                  {isMegaMenu && isExpanded ? (
+                    <div className="ml-4 mb-2 flex flex-col gap-3 border-l-2 border-rose/60 pl-3 pt-1">
+                      {item.megaMenu!.map((col) => (
+                        <div key={col.category} className="flex flex-col gap-1">
+                          <span className="text-[10.5px] font-bold tracking-wider text-rose uppercase">
+                            {col.category}
+                          </span>
+                          {col.items.map((sub) => {
+                            const subActive = isHrefActive(pathname, sub.href);
+                            return (
+                              <a
+                                key={sub.label}
+                                href={sub.href}
+                                aria-current={subActive ? "page" : undefined}
+                                className={`rounded-md px-2 py-1 text-[13px] normal-case ${
+                                  subActive
+                                    ? "bg-white/10 font-semibold text-rose"
+                                    : "font-normal text-white/80 hover:text-rose"
+                                }`}
+                                onClick={closeMobileMenu}
+                              >
+                                {sub.label}
+                              </a>
+                            );
+                          })}
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+
+                  {!isMegaMenu && hasDropdown ? (
+                    <div
+                      className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${
+                        isExpanded
+                          ? "grid-rows-[1fr] opacity-100"
+                          : "grid-rows-[0fr] opacity-0"
+                      }`}
+                    >
+                      <div className="overflow-hidden">
+                        <div className="ml-4 mb-2 flex flex-col gap-1 border-l-2 border-rose/60 pl-3">
+                          {item.dropdown!.map((sub) => {
+                            const subActive = isHrefActive(pathname, sub.href);
+                            return (
+                              <a
+                                key={sub.label}
+                                href={sub.href}
+                                aria-current={subActive ? "page" : undefined}
+                                className={`flex items-center justify-between rounded-md px-2 py-1.5 text-[13px] normal-case ${
+                                  subActive
+                                    ? "bg-white/10 font-semibold text-rose"
+                                    : "font-normal text-white/80 hover:text-rose"
+                                }`}
+                                onClick={closeMobileMenu}
+                                tabIndex={isExpanded ? 0 : -1}
+                              >
+                                <span>{sub.label}</span>
+                                {"badge" in sub &&
+                                typeof sub.badge === "string" ? (
+                                  <span className="ml-2 rounded-full bg-[#f59e0b] px-2 py-0.5 text-[9.5px] font-extrabold text-black uppercase">
+                                    {sub.badge}
+                                  </span>
+                                ) : null}
+                              </a>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
+            <a
+              href={cta.href}
+              className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-rose px-5 py-3 text-[12px] font-bold tracking-[0.08em] text-white uppercase"
+              onClick={closeMobileMenu}
+            >
+              <CalendarIcon className="size-3.5" />
+              {cta.label}
+            </a>
+          </nav>
+        </div>
+      ) : null}
+    </header>
+  );
+}
+

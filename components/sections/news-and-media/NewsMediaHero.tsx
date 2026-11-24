@@ -1,0 +1,110 @@
+"use client";
+import Breadcrumb from "@/components/ui/Breadcrumb";
+
+import Link from "next/link";
+
+import {
+  HeroFullWidthBanner,
+  HeroMobileBanner,
+} from "@/components/ui/HeroFullWidthBanner";
+import HeroCounterBar from "@/components/ui/HeroCounterBar";
+import { Reveal } from "@/components/ui/Reveal";
+
+export default function NewsMediaHero() {
+  return (
+    <>
+      <section
+        className="relative overflow-hidden flex flex-col justify-center pb-6 sm:pb-8 lg:pb-0"
+      style={{
+        background: "var(--pink)",
+      }}
+    >
+      <HeroFullWidthBanner src="/pageBanner/M0500454.jpg" alt="Dr. Mona Dahiya in the News & Media — Times Network India Health Summit & Awards 2025" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 right-[8%] h-[320px] w-[320px] rounded-full opacity-35 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,107,157,0.4) 0%, rgba(232,62,116,0.12) 50%, transparent 70%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 left-[-5%] h-[280px] w-[280px] rounded-full opacity-25 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(232,62,116,0.1) 0%, transparent 68%)",
+        }}
+      />
+
+      <div className="page-container relative z-10 w-full pt-4 sm:pt-5 lg:pt-0">
+        <div className="lg:max-w-[46rem] xl:max-w-[50rem] 2xl:max-w-[52rem] lg:mt-0">
+          <Breadcrumb
+          items={[
+            { label: "About Dr. Mona", href: "/about-mona-dahiya" },
+            { label: "News & Media" }
+          ]}
+        />
+
+          <Reveal variant="slideLeft">
+            <p className="text-[12.5px] font-semibold tracking-wide text-rose sm:text-[13.5px]">
+              News &amp; media
+            </p>
+
+            <h1 className="font-serif mt-2.5 max-w-none text-[1.85rem] leading-[1.18] font-normal tracking-tight text-ink sm:text-[2.35rem] lg:text-[2.45rem] xl:text-[2.75rem]">
+              Dr. Mona Dahiya in the News &amp; Media
+            </h1>
+
+            <p className="mt-5 sm:mt-6.5 max-w-2xl text-[13.5px] leading-relaxed text-ink/80 sm:text-[14.5px]">
+              Dr. Mona Dahiya&apos;s interviews, articles and features have
+              appeared in some of India&apos;s top publications, covering
+              national news and business media as well as healthcare and
+              fertility-focused publications. Click any media outlet below to
+              read the article on the publisher&apos;s website.
+            </p>
+
+            <div className="mt-5 sm:mt-6 flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <Link
+                href="/book-appointment"
+                className="inline-flex items-center justify-center rounded-full bg-rose px-4 py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-white shadow-[0_8px_20px_rgba(232,62,116,0.28)] transition-all hover:bg-rose-dark active:scale-95 sm:px-5 sm:py-3 sm:text-[13.5px]"
+              >
+                Book In-Clinic Consultation
+              </Link>
+              <Link
+                href="/ivf-consultation-online"
+                className="inline-flex items-center justify-center rounded-full bg-blue px-4 py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-white shadow-md ring-1 ring-blue/20 transition-all hover:bg-blue-mid active:scale-95 sm:px-5 sm:py-3 sm:text-[13.5px]"
+              >
+                Schedule Online Consultation
+              </Link>
+            </div>
+
+            <div className="mt-5 sm:mt-6">
+              <a
+                href="#reviews"
+                className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-ink/90 underline underline-offset-4 transition-colors hover:text-rose sm:text-[14px]"
+              >
+                <span>Read Dr. Mona&apos;s Google reviews</span>
+                <span aria-hidden>→</span>
+              </a>
+            </div>
+          </Reveal>
+        </div>
+
+        <HeroMobileBanner src="/pageBanner/M0500454.jpg" alt="Dr. Mona Dahiya in the News & Media — Times Network India Health Summit & Awards 2025" />
+      </div>
+    </section>
+      <section className="relative overflow-hidden bg-white py-7 sm:py-9 border-y border-[#fde2ec]/70">
+        <div className="page-container relative">
+          <HeroCounterBar
+          items={[
+            { target: 43, label: "media features" },
+            { target: 25, suffix: "+", label: "years' expertise" },
+            { target: 90, suffix: "%+", label: "IVF success rates" },
+            { target: 15000, suffix: "+", label: "IVF cycles" },
+          ]}
+        />
+        </div>
+      </section>
+    </>
+  );
+}
