@@ -46,7 +46,7 @@ export async function PUT(request: Request, context: Ctx) {
       return NextResponse.json({ error: "Location title is required" }, { status: 400 });
     }
     const clash = await LocationModel.exists({ slug, _id: { $ne: id } });
-    if (clash) return NextResponse.json({ error: "Slug is already in use" }, { status: 409 });
+    if (clash) return NextResponse.json({ error: `A location with this slug already exists: ${slug}` }, { status: 409 });
     const seo = withShareImage(withCanonical(normalizeSeo(body.seo), `/location/${slug}`), content.hero?.image);
     content.slug = slug;
     content.metadata = {

@@ -12,33 +12,9 @@ import {
   type BlogListingArticle,
 } from "@/data/blogListing";
 
-function parseBlogDate(value: string): number {
-  const trimmed = value.trim();
-  const slash = trimmed.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
-  if (slash) {
-    const year =
-      slash[3].length === 2 ? 2000 + Number(slash[3]) : Number(slash[3]);
-    return Date.UTC(year, Number(slash[2]) - 1, Number(slash[1]));
-  }
-  const parsed = Date.parse(trimmed);
-  return Number.isNaN(parsed) ? 0 : parsed;
-}
-
-function cardIsBlue(title: string, index: number): boolean {
-  let hash = index + 1;
-  for (let i = 0; i < title.length; i += 1) {
-    hash = (hash * 33 + title.charCodeAt(i)) >>> 0;
-  }
-  return hash % 2 === 1;
-}
-
-function formatBlogDate(value: string): string {
-  const time = parseBlogDate(value);
-  if (!time) return value;
-  const date = new Date(time);
-  const month = date.toLocaleDateString("en-GB", { month: "short" });
-  return `${date.getDate()} ${month} ${date.getFullYear()}`;
-}
+const topicAccentMap = new Map(
+  BLOG_TOPICS.map((t) => [t.title, t.accent]),
+);
 
 // Map each topic to authorized theme gradient for its Featured Pillar Guide Banner
 const topicGradientMap: Record<string, string> = {
@@ -61,17 +37,15 @@ export default function BlogListingCatalog({
   const filteredArticles = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     const source = articles ?? BLOG_LISTING_ARTICLES;
-    return source
-      .filter((article) => {
-        const matchesTopic =
-          selectedTopic === "All" || article.topic === selectedTopic;
-        const matchesSearch =
-          !q ||
-          article.title.toLowerCase().includes(q) ||
-          article.topic.toLowerCase().includes(q);
-        return matchesTopic && matchesSearch;
-      })
-      .sort((a, b) => parseBlogDate(b.date) - parseBlogDate(a.date));
+    return source.filter((article) => {
+      const matchesTopic =
+        selectedTopic === "All" || article.topic === selectedTopic;
+      const matchesSearch =
+        !q ||
+        article.title.toLowerCase().includes(q) ||
+        article.topic.toLowerCase().includes(q);
+      return matchesTopic && matchesSearch;
+    });
   }, [articles, selectedTopic, searchQuery]);
 
   const topics = articles
@@ -212,7 +186,7 @@ export default function BlogListingCatalog({
             className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5 animate-in fade-in duration-300"
           >
             {filteredArticles.map((article, idx) => {
-              const isBlue = cardIsBlue(article.title, idx);
+              const isBlue = topicAccentMap.get(article.topic) === "blue";
               return (
                 <Link
                   key={`${article.title}-${idx}`}
@@ -244,7 +218,7 @@ export default function BlogListingCatalog({
                         isBlue ? "text-blue" : "text-rose"
                       }`}
                     >
-                      {formatBlogDate(article.date)} · Read article ↗
+                      {article.date} · Read article ↗
                     </span>
                   </div>
                 </Link>

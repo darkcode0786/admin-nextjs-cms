@@ -48,7 +48,7 @@ export async function PUT(request: Request, context: Ctx) {
       return NextResponse.json({ error: "Sections must be an array" }, { status: 400 });
     }
     const clash = await BlogModel.exists({ slug, _id: { $ne: id } });
-    if (clash) return NextResponse.json({ error: "Slug is already in use" }, { status: 409 });
+    if (clash) return NextResponse.json({ error: `A blog with this slug already exists: ${slug}` }, { status: 409 });
     const seo = withShareImage(withCanonical(normalizeSeo(body.seo), `/blog/${slug}`), content.meta?.image?.src);
     content.slug = slug;
     content.metadata = {

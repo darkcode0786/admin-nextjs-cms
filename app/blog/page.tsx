@@ -6,7 +6,6 @@ import BlogListingReviews from "@/components/sections/blog/BlogListingReviews";
 import AboutConsultation from "@/components/sections/about-mona-dahiya/AboutConsultation";
 import AboutParenthoodCta from "@/components/sections/about-mona-dahiya/AboutParenthoodCta";
 import { SectionReveal } from "@/components/ui/Reveal";
-import { getPublicBlogCards } from "@/lib/cms/public";
 
 export const metadata: Metadata = {
   title: "Fertility & IVF Blog by Dr. Mona Dahiya | Patient Guides & Articles",
@@ -17,12 +16,11 @@ export const metadata: Metadata = {
 export const instant = false;
 
 export default async function BlogListingPage() {
-  const articles = await getPublicBlogCards();
   return (
     <main className="flex min-h-screen flex-col bg-pink">
       <BlogListingHero />
 
-      <BlogListingCatalog articles={articles ?? undefined} />
+      <BlogListingCatalog />
 
       <SectionReveal delay={0.04}>
         <BlogListingReviews />

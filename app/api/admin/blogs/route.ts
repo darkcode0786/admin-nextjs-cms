@@ -6,6 +6,7 @@ import { invalidateCmsCache } from "@/lib/cms/public";
 import { seoIsComplete } from "@/lib/cms/types";
 import { assertSlug, assertStatus, normalizeSeo, readPage, withCanonical, withShareImage } from "@/lib/cms/validate";
 import { connectDb } from "@/lib/db/mongoose";
+import { BLOG_POSTS } from "@/data/blogs";
 import { BlogModel } from "@/lib/models/Blog";
 
 function summary(doc: {
@@ -86,8 +87,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Sections must be an array" }, { status: 400 });
     }
     const exists = await BlogModel.exists({ slug });
-    if (exists) {
-      return NextResponse.json({ error: "Slug is already in use" }, { status: 409 });
+    const staticExists = BLOG_POSTS.some((post) => post.slug === slug);
+    if (exists || staticExists) {
+      return NextResponse.json({ error: `A blog with this slug already exists: ${slug}` }, { status: 409 });
     }
     const seo = withShareImage(withCanonical(normalizeSeo(body.seo), `/blog/${slug}`), content.meta?.image?.src);
     content.slug = slug;

@@ -46,9 +46,20 @@ export const localStorageAdapter: StorageAdapter = {
 
     const filename = `${Date.now()}-${randomBytes(8).toString("hex")}${ext}`;
     const directory = assertInsideRoot(path.join(uploadRoot(), input.folder));
-    await mkdir(directory, { recursive: true });
     const absolute = assertInsideRoot(path.join(directory, filename));
-    await writeFile(absolute, input.buffer);
+    try {
+      await mkdir(directory, { recursive: true });
+      await writeFile(absolute, input.buffer, { flag: "wx" });
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (code === "EACCES" || code === "EPERM") {
+        throw new Error("Upload directory is not writable");
+      }
+      if (code === "EEXIST") {
+        throw new Error("Could not store the image. Try again");
+      }
+      throw new Error("Could not store the image");
+    }
     const url = `${publicBase()}/${input.folder}/${filename}`;
     return { path: url, url };
   },

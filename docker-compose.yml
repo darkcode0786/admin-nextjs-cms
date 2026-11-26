@@ -1,4 +1,20 @@
 services:
+  web:
+    build: .
+    container_name: website-cms-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      UPLOAD_DIR: public/uploads
+      UPLOAD_PUBLIC_BASE: /uploads
+    volumes:
+      - /opt/storage/uploads:/app/public/uploads
+    depends_on:
+      - mongodb
+
   mongodb:
     image: mongo:7
     container_name: website-cms-mongodb

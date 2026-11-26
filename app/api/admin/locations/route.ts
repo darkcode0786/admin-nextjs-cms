@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { LocationPageData } from "@/data/locations";
+import { LOCATION_PAGES, type LocationPageData } from "@/data/locations";
 import { requireAdmin } from "@/lib/auth";
 import { jsonError } from "@/lib/cms/http";
 import { deriveLocationPlace } from "@/lib/cms/public";
@@ -81,7 +81,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Location title is required" }, { status: 400 });
     }
     const exists = await LocationModel.exists({ slug });
-    if (exists) return NextResponse.json({ error: "Slug is already in use" }, { status: 409 });
+    const staticExists = LOCATION_PAGES.some((page) => page.slug === slug);
+    if (exists || staticExists) {
+      return NextResponse.json({ error: `A location with this slug already exists: ${slug}` }, { status: 409 });
+    }
     const seo = withShareImage(withCanonical(normalizeSeo(body.seo), `/location/${slug}`), content.hero?.image);
     content.slug = slug;
     content.metadata = {
