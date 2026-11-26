@@ -117,7 +117,6 @@ export async function getPublicBlogCards() {
     if (!ready) return null;
     const docs = await BlogModel.find({ status: "published" })
       .select("slug content.hero.title content.meta.date content.meta.tags")
-      .sort({ updatedAt: -1 })
       .lean();
     return docs.map((doc) => {
       const content = doc.content as BlogPostData;
