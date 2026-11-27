@@ -11,6 +11,10 @@ import {
   type InlineTextSegment,
 } from "@/data/blogTypes";
 
+function isLocalUpload(src: string) {
+  return src.startsWith("/uploads/");
+}
+
 const linkClass =
   "font-semibold text-blue underline decoration-blue/45 underline-offset-2 transition-colors hover:text-rose hover:decoration-rose";
 
@@ -239,6 +243,7 @@ function renderArticleBlock(block: ArticleBlock, idx: number): ReactNode {
       );
 
     case "image":
+      if (!block.src) return null;
       return (
         <div
           key={idx}
@@ -251,6 +256,7 @@ function renderArticleBlock(block: ArticleBlock, idx: number): ReactNode {
             height={800}
             sizes="(max-width: 1024px) 100vw, 760px"
             className="h-auto w-full"
+            unoptimized={isLocalUpload(block.src)}
           />
         </div>
       );
@@ -386,7 +392,7 @@ export default function BlogArticleContent({
             </div>
 
             {/* Featured Blog Image */}
-            {post.meta.image && (
+            {post.meta.image?.src ? (
               <div className="mt-5 overflow-hidden rounded-2xl border-4 border-white bg-white shadow-[0_14px_36px_rgba(232,62,116,0.1)]">
                 <Image
                   src={post.meta.image.src}
@@ -396,9 +402,10 @@ export default function BlogArticleContent({
                   priority
                   sizes="(max-width: 1024px) 100vw, 760px"
                   className="h-auto w-full"
+                  unoptimized={isLocalUpload(post.meta.image.src)}
                 />
               </div>
-            )}
+            ) : null}
 
             {/* Article Prose Content */}
             <div className="mt-8 space-y-10 text-[14px] leading-relaxed text-ink/85 sm:text-[15px]">
