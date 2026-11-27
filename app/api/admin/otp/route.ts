@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { OTP_COOKIE, sendAdminOtp } from "@/lib/adminOtp";
+import { OTP_COOKIE, requestIsSecure, sendAdminOtp } from "@/lib/adminOtp";
 
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as { email?: string } | null;
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     response.cookies.set(OTP_COOKIE, ticket, {
       httpOnly: true,
       sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      secure: requestIsSecure(request),
       path: "/",
       maxAge: 60 * 10,
     });

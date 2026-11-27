@@ -49,12 +49,7 @@ export default function BlogListingCatalog({
   }, [articles, selectedTopic, searchQuery]);
 
   const topics = articles
-    ? Array.from(new Set(articles.map((article) => article.topic))).map((title) => ({
-        id: title,
-        title,
-        description: "",
-        accent: "rose" as const,
-      }))
+    ? BLOG_TOPICS.filter((topic) => articles.some((article) => article.topic === topic.title))
     : BLOG_TOPICS;
 
   const activePillarGuide = useMemo(() => {

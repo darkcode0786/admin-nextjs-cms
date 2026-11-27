@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { OTP_COOKIE, isAdminEmail, otpMatches } from "@/lib/adminOtp";
+import { OTP_COOKIE, isAdminEmail, otpMatches, requestIsSecure } from "@/lib/adminOtp";
 import { SESSION_COOKIE, expectedSessionToken } from "@/lib/auth";
 
 const SESSION_MAX_AGE = 60 * 60 * 24 * 400;
@@ -11,13 +11,17 @@ export async function POST(request: Request) {
   const code = body?.code?.trim() || "";
   const ticket = (await cookies()).get(OTP_COOKIE)?.value;
   const result = otpMatches(ticket, email, code);
+  const secure = requestIsSecure(request);
   if (!isAdminEmail(email) || !result.ok) {
-    const response = NextResponse.json({ error: "That code is not correct." }, { status: 401 });
+    const response = NextResponse.json(
+      { error: ticket ? "That code is not correct." : "The login code expired. Send a new code." },
+      { status: 401 },
+    );
     if (result.ticket) {
       response.cookies.set(OTP_COOKIE, result.ticket, {
         httpOnly: true,
         sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
+        secure,
         path: "/",
         maxAge: 60 * 10,
       });
@@ -33,7 +37,7 @@ export async function POST(request: Request) {
   response.cookies.set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure,
     path: "/",
     maxAge: SESSION_MAX_AGE,
   });

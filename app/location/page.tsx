@@ -4,7 +4,7 @@ import LocationsShell from "@/components/sections/location/LocationsShell";
 import AboutParenthoodCta from "@/components/sections/about-mona-dahiya/AboutParenthoodCta";
 
 import { SectionReveal } from "@/components/ui/Reveal";
-import { getPublishedLocationSlugs } from "@/lib/cms/public";
+import { getPublicLocationCards, getPublishedLocationSlugs } from "@/lib/cms/public";
 
 export const metadata: Metadata = {
   title: "Locations & Contact | Dr. Mona Dahiya Fertility Clinics",
@@ -14,10 +14,13 @@ export const metadata: Metadata = {
 
 export const instant = false;
 export default async function LocationsPage() {
-  const publishedSlugs = await getPublishedLocationSlugs();
+  const [publishedSlugs, locations] = await Promise.all([
+    getPublishedLocationSlugs(),
+    getPublicLocationCards(),
+  ]);
   return (
     <main className="flex min-h-screen flex-col bg-pink">
-      <LocationsShell publishedSlugs={publishedSlugs} />
+      <LocationsShell publishedSlugs={publishedSlugs} extraLocations={locations ?? []} />
 
       <SectionReveal delay={0.04}>
         <AboutParenthoodCta />

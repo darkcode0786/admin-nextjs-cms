@@ -91,12 +91,15 @@ export async function POST(request: Request) {
       title: seo.metaTitle || content.metadata?.title || content.hero.title,
       description: seo.metaDescription || content.metadata?.description || "",
     };
-    const place = deriveLocationPlace(content);
+    const parentCities = ["Noida", "Ghaziabad", "Delhi"];
+    const chosen = parentCities.includes(body.region) ? body.region : deriveLocationPlace(content).region;
+    const region = chosen === "Greater Noida" ? "Noida" : chosen;
     const doc = await LocationModel.create({
       slug,
       status,
-      city: place.city,
-      region: place.region,
+      city: content.hero.highlightLocation || content.hero.title,
+      region,
+      areaGroup: String(body.areaGroup || "").trim(),
       content,
       seo,
     });

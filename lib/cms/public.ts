@@ -1,6 +1,7 @@
 import type { BlogPostData } from "@/data/blogTypes";
 import type { LocationPageData } from "@/data/locations";
 import { BLOG_POSTS } from "@/data/blogs";
+import { BLOG_LISTING_ARTICLES } from "@/data/blogListing";
 import { LOCATION_PAGES } from "@/data/locations";
 import { connection } from "next/server";
 import { connectDb } from "@/lib/db/mongoose";
@@ -111,24 +112,40 @@ export async function getPublicBlog(slug: string): Promise<BlogRecord | null> {
   }
 }
 
+const BLOG_MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+
+function blogDateValue(value: string) {
+  const text = value.trim();
+  const dayFirst = text.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/);
+  const monthFirst = text.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})$/);
+  const day = Number(dayFirst?.[1] ?? monthFirst?.[2]);
+  const monthName = dayFirst?.[2] ?? monthFirst?.[1] ?? "";
+  const year = Number(dayFirst?.[3] ?? monthFirst?.[3]);
+  const month = BLOG_MONTHS.indexOf(monthName.slice(0, 3).toLowerCase());
+  if (month < 0 || !day || !year) return 0;
+  return Date.UTC(year, month, day);
+}
+
 export async function getPublicBlogCards() {
   try {
     const ready = await blogCollectionReady();
     if (!ready) return null;
     const docs = await BlogModel.find({ status: "published" })
       .select("slug content.hero.title content.meta.date content.meta.tags")
-      .sort({ updatedAt: -1 })
       .lean();
-    return docs.map((doc) => {
-      const content = doc.content as BlogPostData;
-      const topic = content.meta?.tags?.[0] || "Fertility";
-      return {
-        topic,
-        title: content.hero?.title || content.metadata?.title || doc.slug,
-        date: content.meta?.date || "",
-        href: `/blog/${doc.slug}`,
-      };
-    });
+    return docs
+      .map((doc) => {
+        const content = doc.content as BlogPostData;
+        const href = `/blog/${doc.slug}`;
+        const listed = BLOG_LISTING_ARTICLES.find((article) => article.href === href);
+        return {
+          topic: listed?.topic || content.meta?.tags?.[0] || "Fertility",
+          title: listed?.title || content.hero?.title || content.metadata?.title || doc.slug,
+          date: listed?.date || content.meta?.date || "",
+          href,
+        };
+      })
+      .sort((a, b) => blogDateValue(b.date) - blogDateValue(a.date));
   } catch {
     return null;
   }
@@ -153,6 +170,56 @@ export async function getPublicLocation(slug: string): Promise<LocationRecord | 
     };
   } catch {
     return staticLocation(slug);
+  }
+}
+
+export async function getPublicLocationCards() {
+  try {
+    await connection();
+    await connectDb();
+    const count = await LocationModel.estimatedDocumentCount();
+    if (count === 0) return null;
+    const docs = await LocationModel.find({ status: "published" })
+      .select("slug city region areaGroup content.hero.title content.hero.highlightLocation")
+      .sort({ updatedAt: -1 })
+      .lean();
+    return docs.map((doc) => {
+      const content = doc.content as LocationPageData;
+      return {
+        slug: doc.slug as string,
+        title: content.hero?.title || content.hero?.highlightLocation || (doc.slug as string),
+        city: (doc.city as string) || "",
+        region: (doc.region as string) || "",
+        areaGroup: (doc.areaGroup as string) || "",
+        href: `/location/${doc.slug}`,
+      };
+    });
+  } catch {
+    return null;
+  }
+}
+
+export async function getPublishedBlogUpdates(): Promise<Map<string, Date> | null> {
+  try {
+    const ready = await blogCollectionReady();
+    if (!ready) return null;
+    const docs = await BlogModel.find({ status: "published" }).select("slug updatedAt").lean();
+    return new Map(docs.map((doc) => [doc.slug as string, new Date(doc.updatedAt as string | Date)]));
+  } catch {
+    return null;
+  }
+}
+
+export async function getPublishedLocationUpdates(): Promise<Map<string, Date> | null> {
+  try {
+    await connection();
+    await connectDb();
+    const count = await LocationModel.estimatedDocumentCount();
+    if (count === 0) return null;
+    const docs = await LocationModel.find({ status: "published" }).select("slug updatedAt").lean();
+    return new Map(docs.map((doc) => [doc.slug as string, new Date(doc.updatedAt as string | Date)]));
+  } catch {
+    return null;
   }
 }
 

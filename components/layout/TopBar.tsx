@@ -33,9 +33,8 @@ function TopBarItem({ item }: { item: TopBarLink }) {
 export default function TopBar() {
   const { locations, links } = siteData.topBar;
   const Pin = iconMap.pin;
-  const Phone = iconMap.phone;
 
-  const topLinks = links;
+  const topLinks = links.filter((item) => item.type !== "phone");
 
   return (
     <div
@@ -71,14 +70,6 @@ export default function TopBar() {
             </div>
           ))}
         </div>
-
-        <a
-          href="tel:+919267982924"
-          className="ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap font-medium text-white/90 sm:gap-2 md:hidden"
-        >
-          <Phone className="size-3.5 opacity-80" />
-          <span className="tabular-nums">+91 92679 82924</span>
-        </a>
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ const locationSchema = new Schema(
     },
     city: { type: String, default: "" },
     region: { type: String, default: "" },
+    areaGroup: { type: String, default: "" },
     content: { type: Schema.Types.Mixed, required: true },
     seo: { type: seoSchema, default: () => ({}) },
   },

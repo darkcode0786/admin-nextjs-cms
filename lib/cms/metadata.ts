@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { SeoFields } from "./types";
 
 function siteUrl() {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL || "";
+  const raw = process.env.NEXT_PUBLIC_SITE_URL || "https://drmonadahiya.com";
   return raw.replace(/\/+$/, "");
 }
 

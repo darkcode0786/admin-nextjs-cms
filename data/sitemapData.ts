@@ -1,5 +1,9 @@
-export const BASE_URL = "https://drmonadahiya.com";
-export const SITEMAP_LAST_MODIFIED = "2026-11-21";
+export function getSiteUrl() {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL || "https://drmonadahiya.com";
+  return raw.replace(/\/+$/, "");
+}
+
+export const BASE_URL = getSiteUrl();
 
 export type SitemapChangeFrequency =
   | "always"

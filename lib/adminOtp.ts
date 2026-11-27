@@ -3,6 +3,12 @@ import nodemailer from "nodemailer";
 
 export const OTP_COOKIE = "cms_otp";
 
+export function requestIsSecure(request: Request) {
+  const forwarded = request.headers.get("x-forwarded-proto");
+  if (forwarded) return forwarded.split(",")[0]?.trim() === "https";
+  return new URL(request.url).protocol === "https:";
+}
+
 type PendingOtp = { email: string; hash: string; expires: number; attempts: number };
 
 function adminEmail() {

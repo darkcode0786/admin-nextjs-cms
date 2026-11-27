@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllBlogSlugs, getBlogPostBySlug } from "@/data/blogs";
 import { getAllLocationSlugs, getLocationPageBySlug } from "@/data/locations";
-import { SITEMAP_GROUPS } from "@/data/sitemapData";
+import { getSiteUrl, SITEMAP_GROUPS } from "@/data/sitemapData";
 
 export const metadata: Metadata = {
   title: "Sitemap | Dr. Mona Dahiya — Fertility & IVF Specialist",

@@ -18,7 +18,7 @@ function fromIso(value: string) {
   if (!year || !month || !day) return "";
   return new Date(year, month - 1, day).toLocaleDateString("en-GB", {
     day: "numeric",
-    month: "long",
+    month: "short",
     year: "numeric",
   });
 }

@@ -6,10 +6,21 @@ import LocationsRegistration from "@/components/sections/location/LocationsRegis
 import LocationsCityCards from "@/components/sections/location/LocationsCityCards";
 import LocationsDirectory from "@/components/sections/location/LocationsDirectory";
 
+export type ManagedLocation = {
+  slug: string;
+  title: string;
+  city: string;
+  region: string;
+  areaGroup: string;
+  href: string;
+};
+
 export default function LocationsShell({
   publishedSlugs,
+  extraLocations = [],
 }: {
   publishedSlugs?: string[] | null;
+  extraLocations?: ManagedLocation[];
 }) {
   const [query, setQuery] = useState("");
 
@@ -18,7 +29,11 @@ export default function LocationsShell({
       <LocationsHero query={query} onQueryChange={setQuery} />
       <LocationsRegistration />
       <LocationsCityCards />
-      <LocationsDirectory query={query} publishedSlugs={publishedSlugs} />
+      <LocationsDirectory
+        query={query}
+        publishedSlugs={publishedSlugs}
+        extraLocations={extraLocations}
+      />
     </>
   );
 }

@@ -6,7 +6,6 @@ import { usePathname, useRouter } from "next/navigation";
 import siteData from "@/data/site.json";
 import { CloseIcon, MenuIcon } from "@/components/ui/Icons";
 import BreadcrumbBar from "@/components/layout/BreadcrumbBar";
-import BackToTop from "@/components/ui/BackToTop";
 
 const links = [
   { href: "/admin", label: "Dashboard" },
@@ -86,7 +85,6 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         <div className={`min-w-0 flex-1 transition-[margin] duration-200 ${open ? "ml-60" : "ml-0"}`}>
           <BreadcrumbBar />
           <main className="px-4 py-6 sm:px-6 lg:px-8">{children}</main>
-          <BackToTop />
         </div>
       </div>
     </div>

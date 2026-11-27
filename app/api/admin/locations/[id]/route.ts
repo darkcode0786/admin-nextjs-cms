@@ -22,6 +22,7 @@ export async function GET(_request: Request, context: Ctx) {
       status: doc.status,
       city: doc.city,
       region: doc.region,
+      areaGroup: doc.areaGroup || "",
       content: doc.content,
       seo: doc.seo,
       createdAt: doc.createdAt,
@@ -53,10 +54,20 @@ export async function PUT(request: Request, context: Ctx) {
       title: seo.metaTitle || content.metadata?.title || content.hero.title,
       description: seo.metaDescription || content.metadata?.description || "",
     };
-    const place = deriveLocationPlace(content);
+    const parentCities = ["Noida", "Ghaziabad", "Delhi"];
+    const chosen = parentCities.includes(body.region) ? body.region : deriveLocationPlace(content).region;
+    const region = chosen === "Greater Noida" ? "Noida" : chosen;
     const doc = await LocationModel.findByIdAndUpdate(
       id,
-      { slug, status, city: place.city, region: place.region, content, seo },
+      {
+        slug,
+        status,
+        city: content.hero.highlightLocation || content.hero.title,
+        region,
+        areaGroup: String(body.areaGroup || "").trim(),
+        content,
+        seo,
+      },
       { new: true },
     );
     if (!doc) return NextResponse.json({ error: "Not found" }, { status: 404 });

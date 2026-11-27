@@ -91,12 +91,25 @@ function AddButton({ label, onClick }: { label: string; onClick: () => void }) {
   );
 }
 
+const CHILD_AREAS: Record<string, string[]> = {
+  Noida: ["Noida Sectors", "Greater Noida & Noida Extension"],
+  Ghaziabad: ["Areas"],
+  Delhi: ["South Delhi", "East Delhi", "West Delhi", "North Delhi", "Central Delhi"],
+};
+
+function childAreas(city: string, current: string) {
+  const groups = CHILD_AREAS[city] || CHILD_AREAS.Noida;
+  return current && !groups.includes(current) ? [current, ...groups] : groups;
+}
+
 export default function LocationForm({ id }: { id?: string }) {
   const router = useRouter();
   const [slug, setSlug] = useState("");
   const [slugLocked, setSlugLocked] = useState(false);
   const [status, setStatus] = useState<"draft" | "published">("draft");
   const [content, setContent] = useState<LocationPageData>(blankLocation());
+  const [parentCity, setParentCity] = useState("Noida");
+  const [areaGroup, setAreaGroup] = useState("Noida Sectors");
   const [pillsText, setPillsText] = useState("");
   const [seo, setSeo] = useState<SeoFields>(emptySeo());
   const [message, setMessage] = useState("");
@@ -131,6 +144,11 @@ export default function LocationForm({ id }: { id?: string }) {
           consultation: consultationEmpty ? { ...DEFAULT_NEXT_STEP } : consultation,
         }));
         setPillsText((data.content?.hero?.pills || []).join(", "));
+        const savedRegion = data.region === "Greater Noida" ? "Noida" : data.region;
+        if (savedRegion === "Noida" || savedRegion === "Ghaziabad" || savedRegion === "Delhi") {
+          setParentCity(savedRegion);
+        }
+        if (data.areaGroup) setAreaGroup(data.areaGroup);
         setSeo({ ...emptySeo(), ...data.seo });
       })
       .catch((err: Error) => setError(err.message))
@@ -161,6 +179,10 @@ export default function LocationForm({ id }: { id?: string }) {
     setMessage("");
     const nextContent = withoutBlankRows({
       ...content,
+      metadata: {
+        title: seo.metaTitle.trim() || content.hero.title,
+        description: seo.metaDescription.trim(),
+      },
       hero: {
         ...content.hero,
         pills: pillsText.split(",").map((pill) => pill.trim()).filter(Boolean),
@@ -169,7 +191,7 @@ export default function LocationForm({ id }: { id?: string }) {
     const response = await fetch(id ? `/api/admin/locations/${id}` : "/api/admin/locations", {
       method: id ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug, status: nextStatus, content: nextContent, seo }),
+      body: JSON.stringify({ slug, status: nextStatus, content: nextContent, seo, region: parentCity, areaGroup }),
     });
     const data = await response.json();
     if (!response.ok) {
@@ -255,8 +277,32 @@ export default function LocationForm({ id }: { id?: string }) {
               }}
             />
           </label>
-          <label className="text-sm font-semibold">City / highlight
-            <input className={`${input} mt-1`} placeholder="Sector 49, Noida" value={content.hero.highlightLocation} onChange={(e) => patch({ ...content, hero: { ...content.hero, highlightLocation: e.target.value } })} />
+          <label className="text-sm font-semibold">Parent city
+            <select
+              className={`${input} mt-1`}
+              value={parentCity}
+              onChange={(e) => {
+                const next = e.target.value;
+                setParentCity(next);
+                const groups = childAreas(next, "");
+                setAreaGroup(groups[0]);
+                setDirty(true);
+              }}
+            >
+              <option value="Noida">Noida</option>
+              <option value="Ghaziabad">Ghaziabad</option>
+              <option value="Delhi">Delhi</option>
+            </select>
+          </label>
+          <label className="text-sm font-semibold">Child area
+            <select className={`${input} mt-1`} value={areaGroup} onChange={(e) => { setAreaGroup(e.target.value); setDirty(true); }}>
+              {childAreas(parentCity, areaGroup).map((group) => (
+                <option key={group} value={group}>{group}</option>
+              ))}
+            </select>
+          </label>
+          <label className="text-sm font-semibold">Area name
+            <input className={`${input} mt-1`} placeholder="Bhopura" value={content.hero.highlightLocation} onChange={(e) => patch({ ...content, hero: { ...content.hero, highlightLocation: e.target.value } })} />
           </label>
           <label className="text-sm font-semibold">Status
             <select className={`${input} mt-1`} value={status} onChange={(e) => { setStatus(e.target.value as "draft" | "published"); setDirty(true); }}>
@@ -283,10 +329,6 @@ export default function LocationForm({ id }: { id?: string }) {
         <label className="block text-sm font-semibold">Image alt
           <input className={`${input} mt-1`} placeholder="Dr. Mona Dahiya" value={content.hero.imageAlt} onChange={(e) => patch({ ...content, hero: { ...content.hero, imageAlt: e.target.value } })} />
         </label>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Page title" value={content.metadata.title} onChange={(title) => patch({ ...content, metadata: { ...content.metadata, title } })} />
-          <Field label="Page description" value={content.metadata.description} onChange={(description) => patch({ ...content, metadata: { ...content.metadata, description } })} />
-        </div>
         <label className="block text-sm font-semibold">Pills, comma separated
           <input
             className={`${input} mt-1`}
