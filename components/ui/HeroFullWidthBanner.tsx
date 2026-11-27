@@ -191,6 +191,7 @@ export function HeroFullWidthBanner({
           priority={priority}
           quality={95}
           sizes="100vw"
+          unoptimized={src.startsWith("/uploads/")}
           style={{
             objectPosition: `${mobilePosX} 15%`,
             ["--banner-scale" as string]: scale,

@@ -51,6 +51,7 @@ export default function HeroBannerImage({
           priority={priority}
           quality={95}
           sizes="(max-width: 640px) 680px, (max-width: 1024px) 800px, 960px"
+          unoptimized={src.startsWith("/uploads/")}
           className={`object-cover ${objectPosition}`}
         />
       </div>
